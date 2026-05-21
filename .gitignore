@@ -1,0 +1,5 @@
+.playwright-mcp/
+*.zip
+.gemini/
+*.tmp
+screenshot_logo_universidad.png

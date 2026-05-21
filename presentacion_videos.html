@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UGC | Presentación de Energías Alternativas - Escena Inicial</title>
+    <meta name="description" content="Presentación interactiva minimalista a pantalla completa de los clips de video del proyecto de energías alternativas. Universidad La Gran Colombia.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23030704'/%3E%3Cpath d='M32 8 52 19v16c0 12-8 20-20 25-12-5-20-13-20-25V19L32 8Z' fill='%2300913d'/%3E%3Cpath d='M22 38c9 0 17-6 20-18 2 14-5 25-18 27 5-3 8-6 10-11-4 4-8 6-12 6v-4Z' fill='white'/%3E%3C/svg%3E">
+
+    <style>
+        /* ==========================================================================
+           🎨 ESTILOS PREMIUM — CONTENEDOR DE TV CINE
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            cursor: default;
+            transition: cursor 0.3s ease;
+        }
+
+        /* Ocultar el cursor si tiene la clase */
+        .hide-cursor {
+            cursor: none !important;
+        }
+
+        /* Contenedor principal con profundidad radial en 3D */
+        .presentation-container {
+            position: absolute;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, #101625 0%, #000000 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* 📺 MARCO DE TV PREMIUM SATINADO */
+        .tv-frame {
+            position: relative;
+            width: 90vw;
+            max-width: 1350px;
+            background: #182030; /* Metal oscuro satinado */
+            border: 14px solid #222c40; /* Borde exterior cepillado */
+            border-radius: 36px;
+            box-shadow: 
+                0 35px 100px rgba(0, 0, 0, 0.95), 
+                0 0 60px rgba(16, 185, 129, 0.05); /* Sutil aura ambiental cian-verde */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* 🖥️ PANTALLA DE LA TV */
+        .tv-screen {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #000000;
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+        }
+
+        /* Doble Reproductor de Video para Transición Cross-Fade Sin Parpadeos */
+        .slide-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Garantiza que llene la pantalla de la TV perfectamente sin barras */
+            background-color: #000000;
+            opacity: 0;
+            z-index: 5;
+            transition: opacity 0.75s cubic-bezier(0.25, 1, 0.5, 1);
+            pointer-events: none; /* Previene bloqueos de interacción en la capa superior */
+        }
+
+        /* El reproductor activo se hace visible */
+        .slide-video.active {
+            opacity: 1;
+            z-index: 10;
+            pointer-events: auto; /* Permite clics en el video activo */
+        }
+
+        /* 🛡️ BADGE DE OCLUSIÓN DE GEMINI CON LOGO UGC */
+        .gemini-cover-badge {
+            position: absolute;
+            bottom: 11%;
+            right: 4%;
+            z-index: 15;
+            background: rgba(13, 18, 30, 0.85); /* Fondo oscuro de cristal para oclusión total */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 8px 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.7), 
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .gemini-cover-badge img {
+            width: 135px; /* Dimensión ideal para cubrir perfectamente la estrella de Gemini */
+            height: auto;
+            display: block;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        /* 📻 BISEL INFERIOR DIGITAL CON BRANDING */
+        .tv-bezel-bottom {
+            height: 46px;
+            background: linear-gradient(180deg, #182030 0%, #0d121c 100%);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            user-select: none;
+        }
+
+        .tv-brand {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.35) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* LED de encendido en el televisor */
+        .tv-power-led {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #10b981;
+            box-shadow: 
+                0 0 8px #10b981, 
+                0 0 16px rgba(16, 185, 129, 0.6);
+            animation: pulse-led 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse-led {
+            0%, 100% {
+                opacity: 0.7;
+                box-shadow: 0 0 6px #10b981, 0 0 12px rgba(16, 185, 129, 0.4);
+            }
+            50% {
+                opacity: 1;
+                box-shadow: 0 0 12px #10b981, 0 0 24px rgba(16, 185, 129, 0.8);
+            }
+        }
+
+        /* Overlay elegante de carga inicial o de autoplay bloqueado */
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .play-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .play-circle-btn {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2.5px solid #ffffff;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .play-circle-btn:hover {
+            transform: scale(1.1);
+            background: #ffffff;
+            color: #000000;
+            box-shadow: 0 20px 45px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Indicador visual súper discreto de pausa */
+        .status-indicator {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.8);
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .status-indicator.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 📺 CONTENEDOR PRINCIPAL CON TV CENTRADA -->
+    <main class="presentation-container" id="presentationContainer">
+        
+        <!-- Indicador de Estado Temporal (Pausa/Play) -->
+        <div class="status-indicator" id="statusIndicator">PAUSADO</div>
+
+        <!-- 📺 ESTRUCTURA DEL TELEVISOR PREMIUM -->
+        <div class="tv-frame">
+            <!-- 🖥️ PANTALLA DIGITAL -->
+            <div class="tv-screen">
+                <!-- Reproductor 1 -->
+                <video id="video1" class="slide-video active" muted playsinline loop></video>
+                
+                <!-- Reproductor 2 -->
+                <video id="video2" class="slide-video" muted playsinline loop></video>
+
+                 <!-- 🛡️ BADGE DE OCLUSIÓN DE LOGO GEMINI CON LOGO INSTITUCIONAL UGC -->
+                 <div class="gemini-cover-badge">
+                     <img src="Logo-blanco-horizontal UGC.webp" alt="Logo Universidad La Gran Colombia">
+                 </div>
+
+                <!-- Overlay de Inicio en caso de Autoplay bloqueado por el navegador -->
+                <div class="play-overlay" id="playOverlay">
+                    <button class="play-circle-btn" id="overlayPlayBtn" aria-label="Iniciar presentación">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor" style="margin-left: 4px;">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 📻 BISEL INFERIOR METÁLICO -->
+            <div class="tv-bezel-bottom">
+                <span class="tv-brand">Universidad La Gran Colombia</span>
+                <span class="tv-power-led" title="Sistema Activo"></span>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ==========================================================================
+         ⚡ LÓGICA DE CONTROL EXTREMADAMENTE ROBUSTA Y SILENCIOSA
+         ========================================================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // ============================================================
+            // 📂 SECUENCIA DE VIDEOS EN ORDEN NUMÉRICO CORRECTO
+            // ============================================================
+            const videoClips = [
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_2.mp4', // 1. Portada del Proyecto
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359.mp4',   // 2. Logo Institucional
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_4.mp4', // 3. Título Solar
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_8.mp4', // 4. Simulación Solar
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_3.mp4', // 5. Título Hídrica
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_5.mp4', // 6. Simulación Hídrica
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_9.mp4', // 7. Maqueta Exterior General
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_6.mp4', // 8. Detalles Maqueta/Funcionamiento
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_7.mp4'  // 9. Maqueta Interior
+            ];
+
+            let currentSlide = 0;
+            const totalSlides = videoClips.length;
+
+            // Elementos del DOM
+            const video1 = document.getElementById('video1');
+            const video2 = document.getElementById('video2');
+            const container = document.getElementById('presentationContainer');
+            const playOverlay = document.getElementById('playOverlay');
+            const overlayPlayBtn = document.getElementById('overlayPlayBtn');
+            const statusIndicator = document.getElementById('statusIndicator');
+
+            let activePlayer = video1;
+            let inactivePlayer = video2;
+            let isTransitioning = false;
+            let statusTimeout;
+
+            // ============================================================
+            // 🔄 MOTOR DE NAVEGACIÓN Y CARGA DUAL (CROSS-FADE)
+            // ============================================================
+            function goToSlide(index) {
+                if (index < 0 || index >= totalSlides || isTransitioning) return;
+                if (index === currentSlide && activePlayer.src !== '') return;
+
+                isTransitioning = true;
+                currentSlide = index;
+                const nextVideoUrl = videoClips[index];
+
+                // Preparar el reproductor inactivo en segundo plano
+                inactivePlayer.src = nextVideoUrl;
+                inactivePlayer.load();
+                inactivePlayer.muted = true; // Estrictamente silenciado
+
+                inactivePlayer.play().then(() => {
+                    // Hacer la transición de fundido cruzado:
+                    inactivePlayer.classList.add('active');
+                    activePlayer.classList.remove('active');
+
+                    // Intercambiar las referencias de reproductores
+                    const temp = activePlayer;
+                    activePlayer = inactivePlayer;
+                    inactivePlayer = temp;
+
+                    // Apagar el reproductor viejo tras completar la transición de opacidad (0.75s)
+                    setTimeout(() => {
+                        inactivePlayer.pause();
+                        inactivePlayer.src = ""; // Liberar memoria
+                        isTransitioning = false;
+                    }, 750);
+                }).catch(err => {
+                    console.log("El navegador bloqueó el autoplay. Requiere interacción inicial.");
+                    playOverlay.classList.add('visible');
+                    isTransitioning = false;
+                });
+            }
+
+            // ============================================================
+            // 🕹️ LÓGICA DE CONTROL (PLAY / PAUSA / PANTALLA COMPLETA)
+            // ============================================================
+            function togglePlay() {
+                if (activePlayer.paused) {
+                    activePlayer.play().then(() => {
+                        playOverlay.classList.remove('visible');
+                        showStatusIndicator('REPRODUCIR');
+                    });
+                } else {
+                    activePlayer.pause();
+                    showStatusIndicator('PAUSADO');
+                }
+            }
+
+            // Mostrar el cartel discreto de estado
+            function showStatusIndicator(text) {
+                clearTimeout(statusTimeout);
+                statusIndicator.textContent = text;
+                statusIndicator.classList.add('visible');
+                
+                statusTimeout = setTimeout(() => {
+                    statusIndicator.classList.remove('visible');
+                }, 1500);
+            }
+
+            // Activar/desactivar Pantalla Completa nativa
+            function toggleFullscreen() {
+                if (!document.fullscreenElement) {
+                    if (document.documentElement.requestFullscreen) {
+                        document.documentElement.requestFullscreen();
+                    } else if (document.documentElement.webkitRequestFullscreen) {
+                        document.documentElement.webkitRequestFullscreen(); // Safari
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    }
+                }
+            }
+
+            // ============================================================
+            // ⌨️ ASIGNACIÓN DE EVENTOS (TECLADO & RATÓN)
+            // ============================================================
+
+            // Clic en cualquier parte de la pantalla avanza al siguiente video
+            container.addEventListener('click', (e) => {
+                // Si el clic fue en el botón de play inicial, no procesar doble avance
+                if (e.target.closest('#overlayPlayBtn') || playOverlay.classList.contains('visible')) return;
+                
+                if (currentSlide < totalSlides - 1) {
+                    goToSlide(currentSlide + 1);
+                } else {
+                    showStatusIndicator('FIN DE LA PRESENTACIÓN');
+                }
+            });
+
+            // Doble clic activa/desactiva Pantalla Completa
+            container.addEventListener('dblclick', (e) => {
+                if (e.target.closest('#overlayPlayBtn')) return;
+                toggleFullscreen();
+            });
+
+            // Botón de play inicial por bloqueo de autoplay
+            overlayPlayBtn.addEventListener('click', () => {
+                playOverlay.classList.remove('visible');
+                activePlayer.play();
+            });
+
+            // Escuchar eventos de teclado
+            document.addEventListener('keydown', (e) => {
+                switch (e.key) {
+                    case 'ArrowRight':
+                    case 'PageDown': // Soporte para clickers de diapositivas
+                        e.preventDefault();
+                        if (currentSlide < totalSlides - 1) {
+                            goToSlide(currentSlide + 1);
+                        } else {
+                            showStatusIndicator('FIN DE LA PRESENTACIÓN');
+                        }
+                        break;
+                    case 'ArrowLeft':
+                    case 'PageUp': // Soporte para clickers
+                        e.preventDefault();
+                        if (currentSlide > 0) {
+                            goToSlide(currentSlide - 1);
+                        } else {
+                            showStatusIndicator('PRIMERA DIAPOSITIVA');
+                        }
+                        break;
+                    case ' ':
+                        e.preventDefault();
+                        togglePlay();
+                        break;
+                    case 'p':
+                    case 'P':
+                        togglePlay();
+                        break;
+                    case 'f':
+                    case 'F':
+                        toggleFullscreen();
+                        break;
+                }
+            });
+
+            // Soporte de gestos Swipe (deslizar) para pantallas táctiles/tablets
+            let touchStartX = 0;
+            document.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            document.addEventListener('touchend', (e) => {
+                const diff = touchStartX - e.changedTouches[0].screenX;
+                if (Math.abs(diff) > 80) { // Umbral de swipe
+                    if (diff > 0 && currentSlide < totalSlides - 1) {
+                        goToSlide(currentSlide + 1);
+                    } else if (diff < 0 && currentSlide > 0) {
+                        goToSlide(currentSlide - 1);
+                    }
+                }
+            }, { passive: true });
+
+            // ============================================================
+            // 🖱️ OCULTACIÓN AUTOMÁTICA DEL CURSOR DEL RATÓN (ESTILO CINE)
+            // ============================================================
+            let mouseTimer;
+            
+            function hideMouseCursor() {
+                document.body.classList.add('hide-cursor');
+            }
+
+            function resetMouseTimer() {
+                document.body.classList.remove('hide-cursor');
+                clearTimeout(mouseTimer);
+                mouseTimer = setTimeout(hideMouseCursor, 2000); // 2 segundos de inactividad
+            }
+
+            window.addEventListener('mousemove', resetMouseTimer);
+            window.addEventListener('mousedown', resetMouseTimer);
+            window.addEventListener('keydown', resetMouseTimer);
+            resetMouseTimer(); // Inicializar el temporizador
+
+            // ============================================================
+            // 🚀 INICIAR PRESENTACIÓN
+            // ============================================================
+            goToSlide(0);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,963 @@
+/* ==========================================================================
+   🎨 SISTEMA DE DISEÑO PREMIUM — UGC ENERGÍAS ALTERNATIVAS
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;700;800&family=Syne:wght@500;700;800&display=swap');
+
+:root {
+    /* 🟢 Paleta Institucional UGC */
+    --bg-dark-base:    #030704;
+    --bg-dark-card:    rgba(8, 20, 12, 0.52);
+    --bg-dark-nav:     rgba(4, 12, 6, 0.82);
+    --border-glass:    rgba(0, 145, 61, 0.18);
+    --border-active:   rgba(0, 200, 83, 0.45);
+
+    --color-ugc-green:      hsl(146, 100%, 28%);
+    --color-ugc-green-glow: rgba(0, 145, 61, 0.22);
+    --color-ugc-light:      hsl(146, 100%, 42%);
+    --color-ugc-light-glow: rgba(0, 200, 83, 0.20);
+
+    /* Energías */
+    --color-solar:          hsl(42,  100%, 53%);
+    --color-solar-glow:     rgba(245, 158, 11, 0.18);
+    --color-wind:           hsl(180, 70%, 40%);
+    --color-wind-glow:      rgba(20, 184, 166, 0.22);
+    --color-eco:            hsl(146, 100%, 38%);
+    --color-eco-glow:       rgba(0, 145, 61, 0.18);
+    --color-hydro:          hsl(200, 85%, 42%);
+    --color-hydro-glow:     rgba(10, 132, 188, 0.22);
+    --color-biomass:        hsl(28,  70%, 48%);
+    --color-biomass-glow:   rgba(192, 108, 40, 0.22);
+    --color-geo:            hsl(0,   85%, 52%);
+    --color-geo-glow:       rgba(220, 38, 38, 0.22);
+
+    /* Compatibilidad */
+    --color-purple:      var(--color-ugc-green);
+    --color-purple-glow: var(--color-ugc-green-glow);
+
+    /* Tipografía */
+    --font-title: 'Outfit', 'Syne', system-ui, sans-serif;
+    --font-body:  'Inter', 'Segoe UI', system-ui, sans-serif;
+
+    /* Transiciones */
+    --transition-smooth: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-fast:   all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   RESET & BASE
+   ========================================================================== */
+*, *::before, *::after {
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: var(--bg-dark-base);
+    color: #e2e8f0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+}
+
+/* ==========================================================================
+   🌌 FONDO DINÁMICO
+   ========================================================================== */
+.background-canvas {
+    position: absolute; inset: 0;
+    z-index: 1; overflow: hidden; pointer-events: none;
+}
+
+#ecoParticlesCanvas {
+    position: absolute; inset: 0;
+    width: 100vw; height: 100vh;
+    z-index: 2; pointer-events: none; opacity: 0.8;
+}
+
+.glow-orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(140px); opacity: 0.2;
+    mix-blend-mode: screen; z-index: 1;
+}
+
+.orb-green {
+    background: radial-gradient(circle, var(--color-ugc-green) 0%, transparent 70%);
+    width: 55vw; height: 55vw; top: -15vh; right: -5vw;
+    animation: float-orb 28s ease-in-out infinite alternate;
+}
+.orb-wind {
+    background: radial-gradient(circle, var(--color-wind) 0%, transparent 70%);
+    width: 45vw; height: 45vw; bottom: -10vh; left: -5vw;
+    animation: float-orb 22s ease-in-out infinite alternate-reverse;
+}
+.orb-solar {
+    background: radial-gradient(circle, var(--color-solar) 0%, transparent 70%);
+    width: 38vw; height: 38vw; top: 25vh; left: 35vw;
+    animation: float-orb 32s ease-in-out infinite alternate;
+    opacity: 0.1;
+}
+
+/* ==========================================================================
+   🖼️ CONTENEDOR SPA — 8 DIAPOSITIVAS
+   ========================================================================== */
+.presentation-container {
+    display: flex;
+    width: 800vw;
+    height: 100vh;
+    position: relative; z-index: 5;
+    transform: translateX(0);
+    transition: var(--transition-smooth);
+}
+
+.section-slide {
+    width: 100vw; height: 100vh;
+    padding: 5vh 5vw 5vh 10vw;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    position: relative; overflow: hidden;
+}
+
+/* ==========================================================================
+   🧭 NAV LATERAL
+   ========================================================================== */
+.navigation-sidebar {
+    position: fixed; left: 1.8vw; top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    background: var(--bg-dark-nav);
+    backdrop-filter: blur(24px);
+    border: 1px solid var(--border-glass);
+    border-radius: 50px;
+    padding: 18px 10px;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 8px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5),
+                inset 0 1px 1px rgba(255,255,255,0.05);
+}
+
+.nav-indicator-line {
+    width: 1px; height: 120px;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,145,61,0.22) 50%, transparent 100%);
+    position: absolute; z-index: -1;
+}
+
+.nav-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1.5px solid var(--border-glass);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: #94a3b8;
+    font-family: var(--font-title);
+    font-weight: 500; font-size: 0.65rem;
+    transition: var(--transition-fast);
+    position: relative;
+}
+
+.nav-dot::before {
+    content: '';
+    position: absolute;
+    width: 4px; height: 4px;
+    border-radius: 50%; background: #475569;
+    transition: var(--transition-fast);
+}
+
+.nav-dot span {
+    position: absolute; left: 52px;
+    background: var(--bg-dark-nav);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    padding: 6px 14px; border-radius: 10px;
+    font-size: 0.82rem; font-weight: 600;
+    white-space: nowrap; opacity: 0;
+    transform: translateX(-12px);
+    pointer-events: none;
+    transition: var(--transition-fast);
+    color: #fff;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.4);
+}
+
+.nav-dot:hover { border-color: var(--border-active); color: #fff; box-shadow: 0 0 10px var(--color-ugc-green-glow); }
+.nav-dot:hover span { opacity: 1; transform: translateX(0); }
+.nav-dot:hover::before { background: var(--color-ugc-light); transform: scale(1.5); }
+.nav-dot.active { border-color: var(--color-ugc-light); color: #fff; box-shadow: 0 0 18px var(--color-ugc-light-glow), inset 0 0 4px var(--color-ugc-light); }
+.nav-dot.active::before { background: var(--color-ugc-light); width: 7px; height: 7px; box-shadow: 0 0 8px var(--color-ugc-light); }
+
+/* ==========================================================================
+   💎 GLASS CONTAINERS
+   ========================================================================== */
+.glass-container {
+    background: var(--bg-dark-card);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px; padding: 36px;
+    box-shadow: 0 35px 70px rgba(0,0,0,0.45),
+                inset 0 1px 1px rgba(255,255,255,0.03);
+    position: relative; overflow: hidden;
+    transition: var(--transition-smooth);
+}
+
+.glass-container::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 0% 0%, rgba(255,255,255,0.02) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.glass-container:hover {
+    border-color: var(--border-active);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.55),
+                0 0 1px var(--color-ugc-green-glow),
+                inset 0 1px 2px rgba(255,255,255,0.06);
+}
+
+/* ==========================================================================
+   🏷️ TIPOGRAFÍA
+   ========================================================================== */
+.gradient-text {
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: var(--font-title); font-weight: 800;
+}
+
+.green-white-grad   { background-image: linear-gradient(135deg, var(--color-ugc-light) 0%, #ffffff 100%); }
+.solar-grad         { background-image: linear-gradient(135deg, var(--color-solar) 0%, var(--color-ugc-green) 100%); }
+.wind-eco-grad      { background-image: linear-gradient(135deg, var(--color-wind) 0%, var(--color-ugc-green) 100%); }
+.hydro-grad         { background-image: linear-gradient(135deg, var(--color-hydro) 0%, #e0f2fe 100%); }
+.biomass-grad       { background-image: linear-gradient(135deg, var(--color-biomass) 0%, var(--color-solar) 100%); }
+.geo-grad           { background-image: linear-gradient(135deg, var(--color-geo) 0%, var(--color-solar) 100%); }
+
+/* Compatibilidad purple-cyan-grad */
+.purple-cyan-grad   { background-image: linear-gradient(135deg, var(--color-ugc-light) 0%, #ffffff 100%); }
+
+.io-title-huge {
+    font-size: 5.2rem; line-height: 1.05; letter-spacing: -3px;
+    font-family: var(--font-title); font-weight: 800; margin-bottom: 1.6rem;
+}
+.io-subtitle {
+    font-size: 1.3rem; color: #94a3b8; max-width: 650px;
+    font-weight: 300; margin-bottom: 2.5rem; line-height: 1.7;
+}
+.section-title {
+    font-family: var(--font-title); font-size: 2.4rem;
+    font-weight: 800; margin-bottom: 0.5rem;
+    letter-spacing: -1.2px; color: #fff;
+}
+.section-tag {
+    font-family: var(--font-title); text-transform: uppercase;
+    font-size: 0.78rem; letter-spacing: 3px; font-weight: 800;
+    color: var(--color-eco); margin-bottom: 0.7rem; display: inline-block;
+}
+
+/* ==========================================================================
+   🎬 ANIMACIONES EN CASCADA
+   ========================================================================== */
+.section-slide .animate-item {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: calc(var(--delay, 0) * 0.08s);
+}
+.section-slide.active-slide .animate-item {
+    opacity: 1; transform: translateY(0);
+}
+.anatomy-box.animate-item { transform: translateY(35px) scale(0.98); }
+.section-slide.active-slide .anatomy-box.animate-item {
+    opacity: 1; transform: translateY(0) scale(1);
+}
+
+/* ==========================================================================
+   🖼️ PORTADA — HERO
+   ========================================================================== */
+.hero-layout {
+    display: flex; flex-direction: column;
+    justify-content: center; height: 100%;
+}
+
+.logo-container {
+    display: flex; align-items: center; gap: 18px; margin-bottom: 2rem;
+}
+
+.ugc-shield-svg {
+    width: 72px; height: 82px;
+    filter: drop-shadow(0 0 12px var(--color-ugc-green-glow));
+    flex-shrink: 0;
+}
+
+.logo-badges-col {
+    display: flex; flex-direction: column; gap: 6px;
+}
+
+.logo-badge {
+    background: rgba(255,255,255,0.06);
+    padding: 6px 16px; border-radius: 50px;
+    font-family: var(--font-title); font-weight: 700;
+    font-size: 0.8rem; letter-spacing: 1.5px; color: #fff;
+    border: 1px solid var(--border-glass);
+    transition: var(--transition-fast);
+    display: inline-block; width: fit-content;
+}
+.ugc-badge {
+    background: linear-gradient(135deg, var(--color-ugc-green), var(--color-ugc-light));
+    box-shadow: 0 8px 20px var(--color-ugc-green-glow);
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.start-button {
+    background: linear-gradient(135deg, var(--color-ugc-green) 0%, var(--color-ugc-light) 100%);
+    border: none; color: #fff;
+    font-family: var(--font-title); font-weight: 700; font-size: 1.1rem;
+    padding: 16px 38px; border-radius: 50px; cursor: pointer;
+    align-self: flex-start;
+    box-shadow: 0 15px 35px var(--color-ugc-green-glow);
+    transition: var(--transition-fast);
+    display: flex; align-items: center; gap: 12px;
+}
+.start-button:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 20px 45px var(--color-ugc-green-glow), 0 0 12px rgba(255,255,255,0.2);
+}
+.start-button:hover svg { transform: translateX(6px); }
+.start-button svg { transition: var(--transition-fast); }
+
+/* ==========================================================================
+   🔬 LAYOUT ANATOMY — ENERGÍAS (slides 1-5)
+   ========================================================================== */
+.anatomy-slide-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 30px;
+    height: 80vh;
+    align-items: stretch;
+}
+
+/* Caja de anatomía */
+.anatomy-box {
+    background: rgba(8, 20, 12, 0.40);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px;
+    padding: 22px 24px 18px;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.4),
+                inset 0 1px 1px rgba(255,255,255,0.03);
+    transition: var(--transition-smooth);
+}
+
+.anatomy-box:hover {
+    border-color: var(--border-active);
+}
+
+.anatomy-header {
+    margin-bottom: 12px; flex-shrink: 0;
+}
+
+.anatomy-type-tag {
+    font-family: var(--font-title); text-transform: uppercase;
+    font-size: 0.72rem; letter-spacing: 2.5px; font-weight: 800;
+    display: block; margin-bottom: 4px;
+}
+
+.anatomy-title {
+    font-family: var(--font-title); font-size: 1.05rem;
+    font-weight: 700; color: #e2e8f0; letter-spacing: -0.3px;
+}
+
+.anatomy-svg {
+    flex: 1; width: 100%; min-height: 0;
+    overflow: visible;
+}
+
+/* Texto dentro de SVGs de anatomía */
+.anatomy-label-main { font-family: 'Inter', sans-serif; }
+.anatomy-label-sub  { font-family: 'Inter', sans-serif; }
+
+/* Tarjeta simulador derecha */
+.simulator-card {
+    display: flex; flex-direction: column;
+    justify-content: space-between; overflow-y: auto;
+    scrollbar-width: none;
+}
+.simulator-card::-webkit-scrollbar { display: none; }
+
+.energy-desc {
+    color: #94a3b8; font-size: 0.88rem;
+    margin-bottom: 16px; line-height: 1.65;
+}
+
+/* Grilla de chips de componentes */
+.components-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px; margin-bottom: 16px;
+}
+
+.component-chip {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border-glass);
+    border-radius: 10px; padding: 9px 12px;
+    font-size: 0.8rem; color: #e2e8f0;
+    font-weight: 500; transition: var(--transition-fast);
+}
+.component-chip:hover { background: rgba(255,255,255,0.04); }
+
+.chip-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--cc, #fff);
+    box-shadow: 0 0 8px var(--cc, rgba(255,255,255,0.2));
+    flex-shrink: 0;
+}
+
+/* Métricas */
+.metric-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; margin-bottom: 0;
+}
+.metric-card {
+    background: rgba(255,255,255,0.015);
+    border: 1px solid var(--border-glass);
+    border-radius: 14px; padding: 18px;
+    text-align: center; transition: var(--transition-fast);
+}
+.metric-card:hover {
+    background: rgba(0,145,61,0.03);
+    border-color: rgba(0,145,61,0.18);
+    transform: translateY(-2px);
+}
+.metric-value {
+    font-family: var(--font-title); font-size: 2rem;
+    font-weight: 800; margin-bottom: 5px; letter-spacing: -0.5px;
+}
+.metric-label {
+    font-size: 0.75rem; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 1.5px; font-weight: 500;
+}
+
+/* Colores de métrica por energía */
+.solar-value   { color: var(--color-solar);   text-shadow: 0 0 18px var(--color-solar-glow); }
+.wind-value    { color: var(--color-wind);    text-shadow: 0 0 18px var(--color-wind-glow); }
+.hydro-value   { color: var(--color-hydro);   text-shadow: 0 0 18px var(--color-hydro-glow); }
+.biomass-value { color: var(--color-biomass); text-shadow: 0 0 18px var(--color-biomass-glow); }
+.geo-value     { color: var(--color-geo);     text-shadow: 0 0 18px var(--color-geo-glow); }
+
+/* Sliders */
+.interactive-slider-box {
+    margin-top: 18px; padding-top: 18px;
+    border-top: 1px solid var(--border-glass);
+}
+.interactive-slider-box label {
+    display: flex; justify-content: space-between;
+    font-size: 0.9rem; color: #94a3b8; margin-bottom: 12px;
+}
+.slider-custom {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 6px; border-radius: 5px;
+    background: rgba(255,255,255,0.08); outline: none;
+    transition: var(--transition-fast);
+}
+.slider-custom::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--color-solar);
+    box-shadow: 0 0 14px var(--color-solar);
+    cursor: pointer; transition: var(--transition-fast);
+}
+.slider-custom::-webkit-slider-thumb:hover { transform: scale(1.25); }
+.slider-wind::-webkit-slider-thumb    { background: var(--color-wind);    box-shadow: 0 0 14px var(--color-wind); }
+.slider-hydro::-webkit-slider-thumb   { background: var(--color-hydro);   box-shadow: 0 0 14px var(--color-hydro); }
+.slider-biomass::-webkit-slider-thumb { background: var(--color-biomass); box-shadow: 0 0 14px var(--color-biomass); }
+.slider-geo::-webkit-slider-thumb     { background: var(--color-geo);     box-shadow: 0 0 14px var(--color-geo); }
+
+/* ==========================================================================
+   🌀 TURBINA EÓLICA (animación)
+   ========================================================================== */
+.turbine-blades {
+    transform-origin: 200px 150px;
+    fill: #cbd5e1;
+    animation: spin-turbine 6s linear infinite;
+    filter: drop-shadow(0 2px 8px rgba(20,184,166,0.1));
+}
+
+/* ==========================================================================
+   📊 DASHBOARD (Slide 6)
+   ========================================================================== */
+.dashboard-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 30px; height: 78vh;
+}
+.chart-glass-card {
+    height: 100%; display: flex; flex-direction: column;
+}
+.chart-body-container {
+    height: 180px; margin: 12px 0;
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; position: relative;
+}
+.svg-chart-bar { width: 90%; height: 80%; }
+.chart-bar-rect {
+    fill: url(#barGrad); rx: 8px;
+    transition: height 1.2s cubic-bezier(0.16,1,0.3,1),
+                y     1.2s cubic-bezier(0.16,1,0.3,1);
+    cursor: pointer;
+}
+.chart-bar-rect:hover { fill: var(--color-wind); filter: drop-shadow(0 0 10px var(--color-wind)); }
+.cost-total-display {
+    background: linear-gradient(135deg, rgba(0,145,61,0.06), rgba(20,184,166,0.06));
+    border: 1.5px dashed rgba(0,145,61,0.25);
+    border-radius: 16px; padding: 16px 22px;
+    text-align: center; margin-top: auto; position: relative; overflow: hidden;
+}
+.cost-total-display::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at center, rgba(0,145,61,0.07) 0%, transparent 80%);
+    pointer-events: none;
+}
+.cost-total-value {
+    font-family: var(--font-title); font-size: 2.2rem;
+    font-weight: 800; color: #fff; margin-bottom: 2px;
+}
+.control-check-item {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.02);
+    padding: 11px 16px; border-radius: 10px;
+    border: 1px solid var(--border-glass); font-size: 0.9rem; font-weight: 500;
+}
+
+/* ==========================================================================
+   💬 CRONOGRAMA (Slide 7)
+   ========================================================================== */
+.bitacora-layout {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 30px; padding: 30px 0;
+    height: 78vh; align-items: stretch;
+}
+.bitacora-timeline-card {
+    overflow-y: auto; scrollbar-width: thin;
+    scrollbar-color: rgba(20,184,166,0.2) transparent;
+}
+.bitacora-timeline-card::-webkit-scrollbar { width: 5px; }
+.bitacora-timeline-card::-webkit-scrollbar-thumb { background: rgba(20,184,166,0.15); border-radius: 10px; }
+.timeline-container { position: relative; padding-left: 28px; margin-top: 8px; }
+.timeline-line {
+    position: absolute; left: 7px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--color-solar), var(--color-wind), var(--color-eco), var(--color-ugc-light));
+    border-radius: 2px;
+}
+.timeline-item { position: relative; margin-bottom: 22px; }
+.timeline-dot {
+    position: absolute; left: -25px; top: 6px;
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.2);
+    box-shadow: 0 0 10px currentColor;
+}
+.timeline-content {
+    background: rgba(255,255,255,0.015);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px; padding: 16px 20px;
+    transition: var(--transition-fast);
+}
+.timeline-content:hover { border-color: rgba(20,184,166,0.25); background: rgba(20,184,166,0.04); transform: translateX(4px); }
+.timeline-date { font-size: 0.72rem; font-weight: 700; color: var(--color-eco); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+.timeline-title { font-family: var(--font-title); font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 5px; }
+.timeline-desc { font-size: 0.82rem; color: #94a3b8; line-height: 1.5; }
+
+/* Chat */
+.chat-bubbles-container {
+    display: flex; flex-direction: column; gap: 11px;
+    max-height: 45vh; overflow-y: auto; padding-right: 6px;
+    scrollbar-width: thin; scrollbar-color: rgba(20,184,166,0.2) transparent;
+}
+.chat-bubbles-container::-webkit-scrollbar { width: 5px; }
+.chat-bubbles-container::-webkit-scrollbar-thumb { background: rgba(20,184,166,0.15); border-radius: 10px; }
+.chat-bubble {
+    max-width: 85%; padding: 12px 16px; border-radius: 16px;
+    transition: var(--transition-fast);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.chat-bubble-left  { align-self: flex-start; background: rgba(255,255,255,0.02); border: 1px solid var(--border-glass); border-bottom-left-radius: 4px; }
+.chat-bubble-right { align-self: flex-end; background: rgba(0,145,61,0.05); border: 1px solid rgba(0,145,61,0.18); border-bottom-right-radius: 4px; }
+.chat-bubble:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.25); }
+.chat-sender { font-size: 0.72rem; font-weight: 700; color: var(--color-wind); margin-bottom: 3px; }
+.chat-bubble-right .chat-sender { color: var(--color-eco); text-align: right; }
+.chat-text { font-size: 0.84rem; color: #e2e8f0; line-height: 1.5; }
+.chat-time { font-size: 0.65rem; color: #64748b; margin-top: 4px; text-align: right; }
+.chat-bubble-right .chat-time { color: var(--color-wind); }
+.project-lema-box {
+    background: rgba(0,145,61,0.015);
+    border: 1px solid var(--border-glass); border-radius: 14px;
+    padding: 20px; display: flex; align-items: center; gap: 16px;
+    margin-top: 18px; transition: var(--transition-fast);
+}
+.project-lema-box:hover { background: rgba(0,145,61,0.03); border-color: var(--border-active); }
+.lema-icon {
+    width: 46px; height: 46px; border-radius: 10px;
+    background: rgba(0,145,61,0.08); border: 1.5px solid var(--color-eco);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; flex-shrink: 0;
+    box-shadow: 0 0 10px var(--color-eco-glow);
+}
+
+/* ==========================================================================
+   ✨ ANIMACIONES SVG — FLUJOS Y MOVIMIENTOS
+   ========================================================================== */
+
+/* Flujo de corriente solar (DC→AC) */
+@keyframes flow-solar {
+    0%   { stroke-dashoffset: 200; }
+    100% { stroke-dashoffset: 0; }
+}
+.flow-anim-solar  { animation: flow-solar 2.5s linear infinite; }
+.flow-anim-solar2 { animation: flow-solar 1.8s linear infinite; }
+
+/* Flujo energía eólica */
+.flow-anim-wind   { animation: flow-solar 2.2s linear infinite; }
+
+/* Flujo agua */
+@keyframes flow-water {
+    0%   { stroke-dashoffset: 30; }
+    100% { stroke-dashoffset: -30; }
+}
+.water-flow-anim { animation: flow-water 1.2s linear infinite; }
+
+/* Flujo agua hacia abajo (reinyección geotérmica) */
+@keyframes flow-water-down {
+    0%   { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: 30; }
+}
+.water-flow-down-anim { animation: flow-water-down 1.5s linear infinite; }
+
+/* Vapor (flujo de steam) */
+@keyframes flow-steam {
+    0%   { stroke-dashoffset: 40; }
+    100% { stroke-dashoffset: -40; }
+}
+.steam-flow-anim { animation: flow-steam 1.0s linear infinite; }
+
+/* Turbina hidráulica */
+@keyframes spin-hydro {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+@keyframes spin-generator {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+.hydro-turbine-spin  { animation: spin-hydro 2.5s linear infinite; transform-origin: 268px 338px; }
+.biomass-turbine-spin{ animation: spin-hydro 1.8s linear infinite; transform-origin: 315px 185px; }
+.geo-turbine-spin    { animation: spin-hydro 2.2s linear infinite; transform-origin: 276px 127px; }
+
+/* Olas de agua */
+@keyframes wave {
+    0%, 100% { d: path("M30 55 Q55 48 80 55 Q105 62 130 55 Q155 48 180 55"); }
+    50%       { d: path("M30 58 Q55 51 80 58 Q105 65 130 58 Q155 51 180 58"); }
+}
+.wave-anim { animation: wave-shift 2.5s ease-in-out infinite; }
+@keyframes wave-shift {
+    0%, 100% { transform: translateX(0); opacity: 0.4; }
+    50%       { transform: translateX(-6px); opacity: 0.6; }
+}
+
+/* Llamas (biomasa) */
+@keyframes flame {
+    0%, 100% { transform: scaleY(1) translateY(0); opacity: 0.95; }
+    25%  { transform: scaleY(1.1) translateY(-3px) scaleX(0.9); opacity: 1; }
+    50%  { transform: scaleY(0.95) translateY(1px) scaleX(1.05); opacity: 0.9; }
+    75%  { transform: scaleY(1.05) translateY(-2px) scaleX(0.95); opacity: 1; }
+}
+.flame-anim { animation: flame 0.4s ease-in-out infinite; transform-origin: 0px 0px; }
+
+/* Humo / vapor que sube */
+@keyframes smoke-rise {
+    0%   { transform: translateY(0) scale(1); opacity: 0.15; }
+    50%  { transform: translateY(-12px) scale(1.15); opacity: 0.08; }
+    100% { transform: translateY(-24px) scale(1.3); opacity: 0; }
+}
+.smoke-anim { animation: smoke-rise 2s ease-out infinite; }
+
+/* Vapor geotérmico sube por el pozo */
+@keyframes geo-steam-up {
+    0%   { transform: translateY(0) scale(1); opacity: 0.6; }
+    100% { transform: translateY(-180px) scale(0.3); opacity: 0; }
+}
+.geo-steam-rise { animation: geo-steam-up 2.5s ease-in infinite; }
+
+/* Pulso reservorio geotérmico */
+@keyframes geo-pulse {
+    0%, 100% { opacity: 0.85; transform: scale(1); }
+    50%       { opacity: 0.70; transform: scale(1.02); }
+}
+.geo-pulse-anim { animation: geo-pulse 3s ease-in-out infinite; transform-origin: 250px 360px; }
+
+/* Turbina eólica */
+@keyframes spin-turbine {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* SOL girando lentamente */
+@keyframes sun-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+.solar-sun-anim { animation: sun-spin 30s linear infinite; transform-origin: 62px 75px; }
+
+/* Pulso glow solar */
+@keyframes pulse-glow {
+    0%   { opacity: 0.1;  transform: translate(-50%,-50%) scale(0.92); }
+    100% { opacity: 0.22; transform: translate(-50%,-50%) scale(1.08); }
+}
+
+/* Flujo biomasa */
+.flow-anim-biomass { animation: flow-solar 2.0s linear infinite; }
+
+/* LED parpadeo inversor solar */
+@keyframes blink-led {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+}
+.led-blink    { animation: blink-led 1.5s ease-in-out infinite; }
+.inverter-blink { animation: blink-led 2.0s ease-in-out infinite; }
+
+/* Barras del chart (animadas) */
+@keyframes bar-grow {
+    from { transform: scaleY(0); transform-origin: bottom; }
+    to   { transform: scaleY(1); transform-origin: bottom; }
+}
+
+/* Orbes de fondo */
+@keyframes float-orb {
+    0%   { transform: translate(0,0) scale(1); }
+    50%  { transform: translate(4vw,-4vh) scale(1.08); }
+    100% { transform: translate(-2vw,4vh) scale(0.96); }
+}
+
+/* ==========================================================================
+   🎬 GOOGLE I/O — SISTEMA DE ANIMACIÓN BLUR-IN
+   Sobreescribe el sistema translateY anterior con blur+fade
+   ========================================================================== */
+
+/* Keyframe principal */
+@keyframes io-blur-in {
+    from {
+        opacity: 0;
+        transform: translateY(28px);
+        filter: blur(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0px);
+    }
+}
+
+/* Sustituye el sistema transition-based por animation-based para mayor impacto */
+.section-slide .animate-item {
+    opacity: 0;
+    transform: translateY(28px);
+    filter: blur(8px);
+    transition: none !important;
+}
+.section-slide.active-slide .animate-item {
+    animation: io-blur-in 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--delay, 0) * 0.12s);
+}
+
+/* anatomy-box entra con escala también */
+.anatomy-box.animate-item {
+    transform: translateY(35px) scale(0.97);
+    filter: blur(10px);
+}
+.section-slide.active-slide .anatomy-box.animate-item {
+    animation: io-blur-in 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Slides inactivos: desvanecidos y borrosos → foco cinematic */
+.section-slide:not(.active-slide) {
+    opacity: 0.12;
+    filter: blur(3px);
+    transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                filter 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.section-slide.active-slide {
+    opacity: 1;
+    filter: none;
+    transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                filter 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   🌈 AMBIENT COLOR POR DIAPOSITIVA
+   Capa de luz de fondo que cambia de color según la energía activa
+   ========================================================================== */
+.section-slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        ellipse 65% 55% at -5% 50%,
+        var(--slide-ambient, rgba(0,145,61,0.06)) 0%,
+        transparent 70%
+    );
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.section-slide.active-slide::before {
+    opacity: 1;
+}
+
+/* Asegura que el contenido de los slides quede por encima de la capa ambient */
+.section-slide > * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Variables de color ambient por energía (se aplican inline en HTML) */
+/* --slide-ambient: verde UGC para portada/dashboard/cronograma */
+/* --slide-ambient: amber para solar */
+/* --slide-ambient: teal para eólica */
+/* --slide-ambient: sky para hidráulica */
+/* --slide-ambient: orange para biomasa */
+/* --slide-ambient: red para geotérmica */
+
+/* ==========================================================================
+   🔢 CONTADOR DE DIAPOSITIVAS — "02 / 08"
+   ========================================================================== */
+.io-slide-counter {
+    position: fixed;
+    bottom: 28px;
+    right: 3.2vw;
+    z-index: 200;
+    font-family: var(--font-title);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.22);
+    letter-spacing: 3px;
+    transition: color 0.4s ease;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* ==========================================================================
+   🔴 BADGE "● DEMO INTERACTIVO"
+   ========================================================================== */
+.live-demo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    background: rgba(0, 200, 83, 0.07);
+    border: 1px solid rgba(0, 200, 83, 0.28);
+    border-radius: 50px;
+    padding: 6px 18px 6px 14px;
+    font-family: var(--font-title);
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #00c853;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    width: fit-content;
+}
+.live-demo-badge .badge-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #00c853;
+    box-shadow: 0 0 8px #00c853, 0 0 16px rgba(0,200,83,0.4);
+    animation: blink-led 1.1s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+/* Variantes de color para cada energía */
+.live-demo-badge.solar   { background: rgba(245,158,11,0.07); border-color: rgba(245,158,11,0.28); color: #f59e0b; }
+.live-demo-badge.solar   .badge-dot { background: #f59e0b; box-shadow: 0 0 8px #f59e0b, 0 0 16px rgba(245,158,11,0.4); }
+.live-demo-badge.wind    { background: rgba(20,184,166,0.07); border-color: rgba(20,184,166,0.28); color: #14b8a6; }
+.live-demo-badge.wind    .badge-dot { background: #14b8a6; box-shadow: 0 0 8px #14b8a6, 0 0 16px rgba(20,184,166,0.4); }
+.live-demo-badge.hydro   { background: rgba(14,165,233,0.07); border-color: rgba(14,165,233,0.28); color: #0ea5e9; }
+.live-demo-badge.hydro   .badge-dot { background: #0ea5e9; box-shadow: 0 0 8px #0ea5e9; }
+.live-demo-badge.biomass { background: rgba(249,115,22,0.07); border-color: rgba(249,115,22,0.28); color: #f97316; }
+.live-demo-badge.biomass .badge-dot { background: #f97316; box-shadow: 0 0 8px #f97316; }
+.live-demo-badge.geo     { background: rgba(239,68,68,0.07); border-color: rgba(239,68,68,0.28); color: #ef4444; }
+.live-demo-badge.geo     .badge-dot { background: #ef4444; box-shadow: 0 0 8px #ef4444; }
+
+/* ==========================================================================
+   📊 STAT HIGHLIGHT — valor principal enorme tipo Google I/O
+   ========================================================================== */
+.io-stat-hero {
+    font-family: var(--font-title);
+    font-size: 3.4rem;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 4px;
+    transition: color 0.3s ease;
+}
+
+/* ==========================================================================
+   🔠 UPGRADE TIPOGRAFÍA en simulator-card (estilo Google I/O)
+   Títulos grandes, descripciones compactas
+   ========================================================================== */
+.simulator-card .section-title {
+    font-size: 3rem !important;
+    letter-spacing: -1.8px !important;
+    line-height: 1.05;
+    margin-bottom: 0.6rem;
+}
+.simulator-card .section-tag {
+    font-size: 0.72rem;
+    letter-spacing: 4px;
+    margin-bottom: 0.5rem;
+}
+.simulator-card .energy-desc {
+    font-size: 0.82rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.simulator-card .metric-value {
+    font-size: 2.4rem;
+}
+
+/* Número de slide como supertítulo (Google I/O style index) */
+.slide-number-display {
+    font-family: var(--font-title);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.22);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    display: block;
+}
+
+/* ==========================================================================
+   SPLIT CONTENT (legacy solar section — compatibilidad)
+   ========================================================================== */
+.split-content {
+    display: grid; grid-template-columns: 1.15fr 0.85fr;
+    gap: 40px; height: 72vh; align-items: center;
+}
+.solar-visual-box,
+.wind-turbine-box,
+.energy-svg-box {
+    height: 100%; display: flex; align-items: center; justify-content: center;
+    position: relative; border-radius: 24px;
+    background: radial-gradient(circle at center, rgba(8, 24, 16, 0.38) 0%, rgba(3, 7, 4, 0.78) 100%);
+    border: 1px solid var(--border-glass); overflow: hidden;
+    box-shadow: 0 30px 90px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.045);
+    transition: var(--transition-smooth);
+}
