@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UGC | Bucle de Exhibición Continua - Energías Alternativas</title>
-    <meta name="description" content="Presentación en bucle automático continuo e infinito de los clips de video del proyecto de energías alternativas. Universidad La Gran Colombia.">
+    <title>UGC | Bucle de Exhibición SCADA - Energías Alternativas</title>
+    <meta name="description" content="Presentación automática continua en bucle con consola SCADA y telemetría de energías alternativas sobre el edificio real en Bogotá. Universidad La Gran Colombia.">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23030704'/%3E%3Cpath d='M32 8 52 19v16c0 12-8 20-20 25-12-5-20-13-20-25V19L32 8Z' fill='%2300913d'/%3E%3Cpath d='M22 38c9 0 17-6 20-18 2 14-5 25-18 27 5-3 8-6 10-11-4 4-8 6-12 6v-4Z' fill='white'/%3E%3C/svg%3E">
 
     <style>
         /* ==========================================================================
-           🎨 ESTILOS PREMIUM — CONTENEDOR DE TV CINE (MODO KIOSCO BUCLE)
+           🎨 ESTILOS PREMIUM — CONSOLA DE MANDO SCADA Y BUCLE DE STANDBY
            ========================================================================== */
         * {
             margin: 0;
@@ -28,12 +28,10 @@
             transition: cursor 0.3s ease;
         }
 
-        /* Ocultar el cursor si tiene la clase */
         .hide-cursor {
             cursor: none !important;
         }
 
-        /* Contenedor principal con profundidad radial en 3D */
         .presentation-container {
             position: absolute;
             inset: 0;
@@ -49,57 +47,66 @@
         /* 📺 MARCO DE TV PREMIUM SATINADO */
         .tv-frame {
             position: relative;
-            width: 90vw;
-            max-width: 1350px;
-            background: #182030; /* Metal oscuro satinado */
-            border: 14px solid #222c40; /* Borde exterior cepillado */
+            width: 95vw;
+            max-width: 1420px;
+            background: #182030;
+            border: 14px solid #222c40;
             border-radius: 36px;
             box-shadow: 
                 0 35px 100px rgba(0, 0, 0, 0.95), 
-                0 0 60px rgba(0, 210, 220, 0.05); /* Sutil aura ambiental color cian */
+                0 0 60px rgba(0, 210, 220, 0.05);
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
-        /* 🖥️ PANTALLA DE LA TV */
+        /* 🖥️ PANTALLA DIGITAL DIVIDIDA: 72% VIDEO | 28% SCADA */
         .tv-screen {
             position: relative;
             width: 100%;
             aspect-ratio: 16 / 9;
-            background-color: #000000;
+            background-color: #05080f;
             border-radius: 20px 20px 0 0;
             overflow: hidden;
+            display: flex;
+            flex-direction: row;
         }
 
-        /* Doble Reproductor de Video para Transición Cross-Fade Sin Parpadeos */
+        /* Contenedor del Video (72%) */
+        .video-viewport {
+            position: relative;
+            width: 72%;
+            height: 100%;
+            background-color: #000000;
+            overflow: hidden;
+            border-right: 2px solid rgba(255, 255, 255, 0.05);
+        }
+
         .slide-video {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Llena la pantalla perfectamente sin barras negras */
-            background-color: #000000;
+            object-fit: cover;
             opacity: 0;
             z-index: 5;
             transition: opacity 0.75s cubic-bezier(0.25, 1, 0.5, 1);
             pointer-events: none;
         }
 
-        /* El reproductor activo se hace visible */
         .slide-video.active {
             opacity: 1;
             z-index: 10;
             pointer-events: auto;
         }
 
-        /* 🛡️ BADGE DE OCLUSIÓN DE GEMINI CON LOGO UGC */
+        /* 🛡️ BADGE DE OCLUSIÓN DE LOGO GEMINI CON LOGO UGC */
         .gemini-cover-badge {
             position: absolute;
             bottom: 11%;
             right: 4%;
             z-index: 15;
-            background: rgba(13, 18, 30, 0.85); /* Fondo oscuro de cristal para oclusión total */
+            background: rgba(13, 18, 30, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -116,13 +123,147 @@
         }
 
         .gemini-cover-badge img {
-            width: 135px; /* Dimensión ideal para cubrir perfectamente la estrella de Gemini */
+            width: 135px;
             height: auto;
             display: block;
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
         }
 
-        /* 📻 BISEL INFERIOR DIGITAL CON BRANDING EN MODO BUCLE */
+        /* 📊 PANEL DE TELEMETRÍA SCADA (28%) */
+        .scada-panel {
+            width: 28%;
+            height: 100%;
+            background: linear-gradient(180deg, #090e1a 0%, #04060b 100%);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 20;
+            border-left: 1px solid rgba(0, 210, 220, 0.15);
+            box-shadow: inset 10px 0 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .scada-header {
+            border-bottom: 1px solid rgba(0, 210, 220, 0.2);
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+
+        .scada-title {
+            font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #00d2dc;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 8px rgba(0, 210, 220, 0.4);
+        }
+
+        .scada-subtitle {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Bloque de Métricas */
+        .scada-metrics {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            flex-grow: 1;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background-color: var(--accent-color, #00d2dc);
+            box-shadow: 0 0 8px var(--accent-color, #00d2dc);
+        }
+
+        .metric-label {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .metric-value-container {
+            display: flex;
+            align-items: baseline;
+            margin-top: 6px;
+        }
+
+        .metric-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .metric-unit {
+            font-size: 0.8rem;
+            color: var(--accent-color, #00d2dc);
+            margin-left: 4px;
+            font-weight: 600;
+        }
+
+        /* Visualizador de Gráfico Dinámico */
+        .scada-visualizer {
+            height: 130px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 210, 220, 0.1);
+            border-radius: 12px;
+            margin-top: 16px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* ⏳ BARRA DE PROGRESO DE DIAPOSITIVA (Sutil línea premium de carga) */
+        .tv-progress-bar-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 20;
+        }
+
+        .tv-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00913d 0%, #00d2dc 100%);
+            transition: width 0.1s linear;
+        }
+
+        /* 📻 BISEL INFERIOR DIGITAL CON BRANDING */
         .tv-bezel-bottom {
             height: 46px;
             background: linear-gradient(180deg, #182030 0%, #0d121c 100%);
@@ -146,14 +287,15 @@
         }
 
         .tv-status-badge {
-            font-size: 0.6rem;
-            background: rgba(0, 210, 220, 0.1);
-            border: 1px solid rgba(0, 210, 220, 0.25);
+            font-size: 0.55rem;
+            background: rgba(0, 210, 220, 0.15);
+            border: 1px solid rgba(0, 210, 220, 0.3);
             color: #00d2dc;
             padding: 2px 8px;
             border-radius: 4px;
             margin-right: 12px;
             letter-spacing: 1px;
+            font-weight: 700;
         }
 
         .tv-right-info {
@@ -161,7 +303,6 @@
             align-items: center;
         }
 
-        /* LED de encendido en el televisor (Color cian para diferenciar el modo bucle) */
         .tv-power-led {
             width: 8px;
             height: 8px;
@@ -191,7 +332,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(0, 0, 0, 0.85);
             z-index: 100;
             opacity: 0;
             pointer-events: none;
@@ -226,19 +367,19 @@
             box-shadow: 0 20px 45px rgba(255, 255, 255, 0.2);
         }
 
-        /* Indicador visual de estado temporal */
+        /* Indicador visual discreto de pausa */
         .status-indicator {
             position: absolute;
             top: 25px;
             left: 25px;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(0, 210, 220, 0.2);
             padding: 8px 16px;
             border-radius: 8px;
             font-size: 0.75rem;
-            font-weight: 500;
+            font-weight: 600;
             letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.8);
+            color: #00d2dc;
             z-index: 50;
             opacity: 0;
             pointer-events: none;
@@ -248,24 +389,6 @@
 
         .status-indicator.visible {
             opacity: 1;
-        }
-
-        /* ⏳ BARRA DE PROGRESO DE DIAPOSITIVA (Sutil línea premium de carga) */
-        .tv-progress-bar-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.05);
-            z-index: 20;
-        }
-
-        .tv-progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #00913d 0%, #00d2dc 100%);
-            transition: width 0.1s linear;
         }
     </style>
 </head>
@@ -279,37 +402,60 @@
 
         <!-- 📺 ESTRUCTURA DEL TELEVISOR PREMIUM -->
         <div class="tv-frame">
-            <!-- 🖥️ PANTALLA DIGITAL -->
+            <!-- 🖥️ PANTALLA DIGITAL COMPLETA -->
             <div class="tv-screen">
-                <!-- Reproductor 1 (Sin atributo loop para poder oír el evento ended) -->
-                <video id="video1" class="slide-video active" muted playsinline></video>
                 
-                <!-- Reproductor 2 (Sin atributo loop) -->
-                <video id="video2" class="slide-video" muted playsinline></video>
+                <!-- 🖥️ VISTA DEL VIDEO (72%) -->
+                <div class="video-viewport">
+                    <!-- Reproductor 1 (Sin loop para emitir 'ended') -->
+                    <video id="video1" class="slide-video active" muted playsinline></video>
+                    
+                    <!-- Reproductor 2 (Sin loop) -->
+                    <video id="video2" class="slide-video" muted playsinline></video>
 
-                 <!-- 🛡️ BADGE DE OCLUSIÓN DE LOGO GEMINI CON LOGO INSTITUCIONAL UGC -->
-                 <div class="gemini-cover-badge">
-                     <img src="Logo-blanco-horizontal UGC.webp" alt="Logo Universidad La Gran Colombia">
-                 </div>
+                    <!-- 🛡️ BADGE DE OCLUSIÓN DE LOGO GEMINI CON LOGO INSTITUCIONAL UGC -->
+                    <div class="gemini-cover-badge">
+                        <img src="Logo-blanco-horizontal UGC.webp" alt="Logo Universidad La Gran Colombia">
+                    </div>
 
-                 <!-- ⏳ BARRA DE PROGRESO INFERIOR PREMIUM -->
-                 <div class="tv-progress-bar-container">
-                     <div class="tv-progress-bar" id="progressBar"></div>
-                 </div>
+                    <!-- ⏳ BARRA DE PROGRESO DE DIAPOSITIVA (RASTREA EL VIDEO) -->
+                    <div class="tv-progress-bar-container">
+                        <div class="tv-progress-bar" id="progressBar"></div>
+                    </div>
+                </div>
+
+                <!-- 📊 PANEL SCADA HOLOGRÁFICO DE TELEMETRÍA (28%) -->
+                <div class="scada-panel">
+                    <div class="scada-header">
+                        <div class="scada-title" id="scadaTitle">CONSOLA SCADA</div>
+                        <div class="scada-subtitle" id="scadaSubtitle">EDIFICIO SOSTENIBLE</div>
+                    </div>
+                    
+                    <!-- Métricas de Telemetría Dinámicas -->
+                    <div class="scada-metrics" id="scadaMetrics">
+                        <!-- Renderizado en caliente por JS -->
+                    </div>
+                    
+                    <!-- Gráfico SVG Animado en Caliente -->
+                    <div class="scada-visualizer" id="scadaVisualizer">
+                        <!-- Renderizado dinámico por JS -->
+                    </div>
+                </div>
 
                 <!-- Overlay de Inicio en caso de Autoplay bloqueado por el navegador -->
                 <div class="play-overlay" id="playOverlay">
-                    <button class="play-circle-btn" id="overlayPlayBtn" aria-label="Iniciar reproducción continua">
+                    <button class="play-circle-btn" id="overlayPlayBtn" aria-label="Iniciar presentación continua">
                         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor" style="margin-left: 4px;">
                             <polygon points="5 3 19 12 5 21 5 3"></polygon>
                         </svg>
                     </button>
                 </div>
+
             </div>
 
             <!-- 📻 BISEL INFERIOR METÁLICO -->
             <div class="tv-bezel-bottom">
-                <span class="tv-brand">Universidad La Gran Colombia — Bucle de Exhibición</span>
+                <span class="tv-brand">Universidad La Gran Colombia — Exhibición Standby</span>
                 <div class="tv-right-info">
                     <span class="tv-status-badge">AUTO-PLAY INFINITO</span>
                     <span class="tv-power-led" title="Modo Standby Activo"></span>
@@ -320,16 +466,16 @@
     </main>
 
     <!-- ==========================================================================
-         ⚡ LÓGICA DE BUCLE CONTINUO AUTOMÁTICO (EVENT-DRIVEN CROSS-FADE)
+         ⚡ LÓGICA DE CONTROL DE BUCLE AUTOMÁTICO CON TELEMETRÍA SCADA ACTIVA
          ========================================================================== -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
             // ============================================================
-            // 📂 SECUENCIA COMPLETA DE 12 VIDEOS
+            // 📂 SECUENCIA COMPLETA DE 12 VIDEOS (MISMO ORDEN EXACTO)
             // ============================================================
             const videoClips = [
-                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_2.mp4',          // 1. Portada del Proyecto
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_2.mp4',          // 1. Portada del Proyecto (Edificio Real Bogotá)
                 'Escena inicial/Escena_inicial_-_2026-05-21_202605211359.mp4',            // 2. Logo Institucional
                 'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_4.mp4',          // 3. Título Solar
                 'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_8.mp4',          // 4. Simulación Solar
@@ -343,6 +489,144 @@
                 'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_7.mp4'           // 12. Maqueta Interior
             ];
 
+            // ============================================================
+            // 📊 BASE DE DATOS DE TELEMETRÍA REALÍSTICA Y FLUIDA
+            // ============================================================
+            const scadaDatabase = [
+                {
+                    titulo: 'SISTEMA SCADA',
+                    subtitulo: 'EDIFICIO REAL BOGOTÁ D.C.',
+                    accent: '#00d2dc',
+                    metricas: [
+                        { label: 'Ubicación Física', value: 'Bogotá D.C.', unit: '', static: true },
+                        { label: 'Altitud de Diseño', value: '2.625', unit: ' msnm', static: true },
+                        { label: 'Modelo en Revit', value: 'Estructura Real', unit: '', static: true }
+                    ],
+                    grafico: 'radar'
+                },
+                {
+                    titulo: 'MARCA DE PROYECTO',
+                    subtitulo: 'ESTUDIO ACADÉMICO UGC',
+                    accent: '#00d2dc',
+                    metricas: [
+                        { label: 'Proyecto de Grado', value: 'Hibridación Energética', unit: '', static: true },
+                        { label: 'Facultad UGC', value: 'Ingeniería Civil', unit: '', static: true },
+                        { label: 'Coordinación', value: 'Juan Pablo & Grupo', unit: '', static: true }
+                    ],
+                    grafico: 'radar'
+                },
+                {
+                    titulo: 'MÓDULO SOLAR',
+                    subtitulo: 'TECNOLOGÍA FOTOVOLTAICA',
+                    accent: '#f59e0b',
+                    metricas: [
+                        { label: 'Tipo de Células', value: 'PERC Monocristalino', unit: '', static: true },
+                        { label: 'Eficiencia de Captación', value: '22.0', unit: '%', static: true },
+                        { label: 'Distribución', value: 'Cubierta & Fachada', unit: '', static: true }
+                    ],
+                    grafico: 'solar'
+                },
+                {
+                    titulo: 'TELEMETRÍA SOLAR',
+                    subtitulo: 'PLANTA GENERADORA ACTIVA',
+                    accent: '#f59e0b',
+                    metricas: [
+                        { label: 'Irradiancia Solar', value: 755, variacion: 12, unit: ' W/m²', precision: 0 },
+                        { label: 'Generación Total', value: 4.38, variacion: 0.08, unit: ' kW', precision: 2 },
+                        { label: 'Inversor Sincrónico', value: 'SINCRO OK', unit: '', static: true }
+                    ],
+                    grafico: 'solar_waves'
+                },
+                {
+                    titulo: 'MÓDULO HÍDRICO',
+                    subtitulo: 'PICO-GENERACIÓN INTERNA',
+                    accent: '#14b8a6',
+                    metricas: [
+                        { label: 'Modelo Turbina', value: 'Micro-Pelton Escala', unit: '', static: true },
+                        { label: 'Caída de Diseño', value: '24.5', unit: ' m', static: true },
+                        { label: 'Fuente de Flujo', value: 'Pluvial & Aguas Grises', unit: '', static: true }
+                    ],
+                    grafico: 'hidro'
+                },
+                {
+                    titulo: 'TELEMETRÍA HÍDRICA',
+                    subtitulo: 'DINÁMICA DE CAUDALES',
+                    accent: '#14b8a6',
+                    metricas: [
+                        { label: 'Caudal de Paso', value: 2.22, variacion: 0.05, unit: ' L/s', precision: 2 },
+                        { label: 'Presión Hidráulica', value: 1.91, variacion: 0.03, unit: ' Bar', precision: 2 },
+                        { label: 'Generación Hídrica', value: 1.24, variacion: 0.04, unit: ' kW', precision: 2 }
+                    ],
+                    grafico: 'hidro_gauge'
+                },
+                {
+                    titulo: 'MÓDULO EÓLICO',
+                    subtitulo: 'MICRO-GENERACIÓN URBANA',
+                    accent: '#00d2dc',
+                    metricas: [
+                        { label: 'Aerogeneradores', value: 'Eje Horiz. NACA-4412', unit: '', static: true },
+                        { label: 'Arranque de Viento', value: '1.5', unit: ' m/s', static: true },
+                        { label: 'Localización', value: 'Cornisas Superiores', unit: '', static: true }
+                    ],
+                    grafico: 'eolica'
+                },
+                {
+                    titulo: 'TELEMETRÍA EÓLICA',
+                    subtitulo: 'MULTIPLICADOR DE VIENTO',
+                    accent: '#00d2dc',
+                    metricas: [
+                        { label: 'Viento Ambiental', value: 3.22, variacion: 0.15, unit: ' m/s', precision: 2 },
+                        { label: 'Viento Venturi', value: 6.44, variacion: 0.28, unit: ' m/s', precision: 2 },
+                        { label: 'Generación Eólica', value: 3.02, variacion: 0.11, unit: ' kW', precision: 2 }
+                    ],
+                    grafico: 'eolica_waves'
+                },
+                {
+                    titulo: 'PROTOTIPO MAQUETA',
+                    subtitulo: 'ESTRUCTURA INTEGRADA',
+                    accent: '#10b981',
+                    metricas: [
+                        { label: 'Escala Física', value: 'Prototipo 1:50', unit: '', static: true },
+                        { label: 'Material Estructural', value: 'Madera & PETG', unit: '', static: true },
+                        { label: 'Integración SCADA', value: 'ESP32 IoT Central', unit: '', static: true }
+                    ],
+                    grafico: 'maqueta'
+                },
+                {
+                    titulo: 'MAQUETA FÍSICA',
+                    subtitulo: 'RED DE MONITOREO SENSORIAL',
+                    accent: '#10b981',
+                    metricas: [
+                        { label: 'Iluminación Activa', value: 'MicroLED de Precisión', unit: '', static: true },
+                        { label: 'Sensores de Campo', value: 'Temp, Humedad, CO₂', unit: '', static: true },
+                        { label: 'Comunicación', value: 'WiFi - Protocolo MQTT', unit: '', static: true }
+                    ],
+                    grafico: 'maqueta_detail'
+                },
+                {
+                    titulo: 'MAQUETA ACÚSTICA',
+                    subtitulo: 'VENTILACIÓN Y CONFORT',
+                    accent: '#86efac',
+                    metricas: [
+                        { label: 'Arquitectura', value: 'Atrio Central Activo', unit: '', static: true },
+                        { label: 'Renovación de Aire', value: 'Cruzada Pasiva', unit: '', static: true },
+                        { label: 'Estudio Fluidos CFD', value: 'Simulado en Revit/CFD', unit: '', static: true }
+                    ],
+                    grafico: 'maqueta_dron'
+                },
+                {
+                    titulo: 'TELEMETRÍA INTERIOR',
+                    subtitulo: 'CONFORT FÍSICO DE CABINAS',
+                    accent: '#86efac',
+                    metricas: [
+                        { label: 'Temperatura Interior', value: 19.4, variacion: 0.15, unit: ' °C', precision: 1 },
+                        { label: 'Humedad Relativa', value: 54.8, variacion: 0.3, unit: ' %', precision: 1 },
+                        { label: 'Concentración CO₂', value: 382, variacion: 3, unit: ' ppm', precision: 0 }
+                    ],
+                    grafico: 'maqueta_sensors'
+                }
+            ];
+
             let currentSlide = 0;
             const totalSlides = videoClips.length;
 
@@ -354,12 +638,22 @@
             const overlayPlayBtn = document.getElementById('overlayPlayBtn');
             const statusIndicator = document.getElementById('statusIndicator');
             const progressBar = document.getElementById('progressBar');
+            
+            // Elementos del Panel SCADA
+            const scadaTitle = document.getElementById('scadaTitle');
+            const scadaSubtitle = document.getElementById('scadaSubtitle');
+            const scadaMetricsContainer = document.getElementById('scadaMetrics');
+            const scadaVisualizer = document.getElementById('scadaVisualizer');
 
             let activePlayer = video1;
             let inactivePlayer = video2;
             let isTransitioning = false;
             let statusTimeout;
-            let progressInterval;
+            let telemetryInterval;
+            let animationFrameId;
+
+            // Instancia de datos dinámicos actuales para fluctuación
+            let currentTelemetryValues = [];
 
             // ============================================================
             // 🔄 MOTOR DE NAVEGACIÓN Y CARGA DUAL (CROSS-FADE)
@@ -372,7 +666,6 @@
                 const nextVideoUrl = videoClips[index];
 
                 // Limpiar barra de progreso
-                clearInterval(progressInterval);
                 progressBar.style.width = '0%';
 
                 // Preparar el reproductor inactivo en segundo plano
@@ -385,12 +678,12 @@
                     inactivePlayer.classList.add('active');
                     activePlayer.classList.remove('active');
 
-                    // Intercambiar los reproductores
+                    // Intercambiar las referencias de reproductores
                     const temp = activePlayer;
                     activePlayer = inactivePlayer;
                     inactivePlayer = temp;
 
-                    // Desvincular eventos del reproductor viejo para evitar colisiones
+                    // Desvincular eventos de timeupdate del reproductor viejo
                     inactivePlayer.ontimeupdate = null;
 
                     // Vincular seguimiento de progreso al nuevo reproductor activo
@@ -407,6 +700,9 @@
                     playOverlay.classList.add('visible');
                     isTransitioning = false;
                 });
+
+                // Actualizar la Consola SCADA para la diapositiva actual
+                updateScadaPanel(index);
             }
 
             // ============================================================
@@ -437,17 +733,280 @@
             video2.addEventListener('ended', handleVideoEnded);
 
             // ============================================================
-            // 🕹️ LÓGICA DE CONTROL MANUAL DE SOPORTE (PLAY / PAUSA)
+            // 📊 MOTOR DE CONSOLA SCADA: RENDERIZACIÓN Y DINAMISMO EN VIVO
+            // ============================================================
+            function updateScadaPanel(index) {
+                const data = scadaDatabase[index];
+                
+                // Actualizar títulos
+                scadaTitle.textContent = data.titulo;
+                scadaSubtitle.textContent = data.subtitulo;
+                scadaTitle.style.color = data.accent;
+                scadaTitle.style.textShadow = `0 0 8px ${data.accent}66`;
+
+                // Detener intervalos y animaciones viejos
+                clearInterval(telemetryInterval);
+                cancelAnimationFrame(animationFrameId);
+
+                // Inicializar las métricas
+                currentTelemetryValues = data.metricas.map(m => {
+                    return {
+                        label: m.label,
+                        baseValue: m.value,
+                        currentValue: m.value,
+                        variacion: m.variacion || 0,
+                        unit: m.unit,
+                        precision: m.precision !== undefined ? m.precision : 2,
+                        static: m.static || false
+                    };
+                });
+
+                // Renderizar inicialmente las métricas en el DOM
+                renderMetrics(data.accent);
+
+                // Si hay métricas dinámicas, arrancar el temporizador de fluctuación (telemetría viva)
+                const hasDynamic = currentTelemetryValues.some(m => !m.static);
+                if (hasDynamic) {
+                    telemetryInterval = setInterval(() => {
+                        currentTelemetryValues.forEach((m, idx) => {
+                            if (!m.static) {
+                                // Fluctuación técnica realista (caminata aleatoria controlada)
+                                const shift = (Math.random() - 0.5) * m.variacion * 2;
+                                m.currentValue = m.baseValue + shift;
+                                
+                                // Actualizar en el DOM de forma fluida
+                                const valueEl = document.getElementById(`metric-val-${idx}`);
+                                if (valueEl) {
+                                    valueEl.textContent = m.currentValue.toFixed(m.precision);
+                                }
+                            }
+                        });
+                    }, 1200); // Variación cada 1.2 segundos
+                }
+
+                // Renderizar y arrancar los gráficos animados SVG en caliente
+                renderAndAnimateGraph(data.grafico, data.accent);
+            }
+
+            function renderMetrics(accentColor) {
+                scadaMetricsContainer.innerHTML = '';
+                currentTelemetryValues.forEach((m, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'metric-card';
+                    card.style.setProperty('--accent-color', accentColor);
+
+                    const label = document.createElement('span');
+                    label.className = 'metric-label';
+                    label.textContent = m.label;
+
+                    const valContainer = document.createElement('div');
+                    valContainer.className = 'metric-value-container';
+
+                    const value = document.createElement('span');
+                    value.className = 'metric-value';
+                    value.id = `metric-val-${idx}`;
+                    
+                    if (m.static) {
+                        value.textContent = m.baseValue;
+                    } else {
+                        value.textContent = m.baseValue.toFixed(m.precision);
+                    }
+
+                    const unit = document.createElement('span');
+                    unit.className = 'metric-unit';
+                    unit.style.color = accentColor;
+                    unit.textContent = m.unit;
+
+                    valContainer.appendChild(value);
+                    valContainer.appendChild(unit);
+                    card.appendChild(label);
+                    card.appendChild(valContainer);
+                    scadaMetricsContainer.appendChild(card);
+                });
+            }
+
+            // ============================================================
+            // 📈 GRÁFICOS SVG ANIMADOS DE ALTO RENDIMIENTO (EN CALIENTE)
+            // ============================================================
+            function renderAndAnimateGraph(type, accentColor) {
+                scadaVisualizer.innerHTML = '';
+                
+                if (type === 'radar') {
+                    // Círculo de escaneo radar de alta tecnología
+                    scadaVisualizer.innerHTML = `
+                        <svg width="100%" height="100%" viewBox="0 0 100 100" style="background:#02050b;">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="${accentColor}" stroke-width="0.5" opacity="0.3"/>
+                            <circle cx="50" cy="50" r="30" fill="none" stroke="${accentColor}" stroke-width="0.5" opacity="0.2"/>
+                            <circle cx="50" cy="50" r="15" fill="none" stroke="${accentColor}" stroke-width="0.5" opacity="0.1"/>
+                            <line x1="5" y1="50" x2="95" y2="50" stroke="${accentColor}" stroke-width="0.5" opacity="0.2"/>
+                            <line x1="50" y1="5" x2="50" y2="95" stroke="${accentColor}" stroke-width="0.5" opacity="0.2"/>
+                            <line id="radarSweep" x1="50" y1="50" x2="85" y2="15" stroke="${accentColor}" stroke-width="1.5"/>
+                            <circle cx="50" cy="50" r="2" fill="${accentColor}"/>
+                        </svg>
+                    `;
+                    let angle = 0;
+                    const line = document.getElementById('radarSweep');
+                    function sweep() {
+                        angle = (angle + 1.5) % 360;
+                        const rad = (angle * Math.PI) / 180;
+                        const x = 50 + 40 * Math.cos(rad);
+                        const y = 50 + 40 * Math.sin(rad);
+                        line.setAttribute('x2', x);
+                        line.setAttribute('y2', y);
+                        animationFrameId = requestAnimationFrame(sweep);
+                    }
+                    sweep();
+
+                } else if (type === 'solar' || type === 'solar_waves') {
+                    // Onda de oscilación de potencia fotovoltaica (C.A.)
+                    scadaVisualizer.innerHTML = `
+                        <svg width="100%" height="100%" viewBox="0 0 100 50" style="background:#02050b;">
+                            <path id="wavePath" fill="none" stroke="${accentColor}" stroke-width="1.5" d=""/>
+                            <line x1="0" y1="25" x2="100" y2="25" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+                        </svg>
+                    `;
+                    const path = document.getElementById('wavePath');
+                    let offset = 0;
+                    function animateWave() {
+                        offset += 0.08;
+                        let points = [];
+                        const amp = type === 'solar_waves' ? 12 : 5;
+                        for (let x = 0; x <= 100; x += 2) {
+                            const y = 25 + amp * Math.sin((x * 0.15) - offset);
+                            points.push(`${x},${y}`);
+                        }
+                        path.setAttribute('d', `M ${points.join(' L ')}`);
+                        animationFrameId = requestAnimationFrame(animateWave);
+                    }
+                    animateWave();
+
+                } else if (type === 'hidro' || type === 'hidro_gauge') {
+                    // Tacómetro o indicador rotativo circular de presión/RPM
+                    scadaVisualizer.innerHTML = `
+                        <svg width="100%" height="100%" viewBox="0 0 100 100" style="background:#02050b;">
+                            <path d="M 20 80 A 40 40 0 1 1 80 80" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="8" stroke-linecap="round"/>
+                            <path id="gaugeArc" d="M 20 80 A 40 40 0 0 1 80 80" fill="none" stroke="${accentColor}" stroke-width="8" stroke-linecap="round" stroke-dasharray="188" stroke-dashoffset="188"/>
+                            <line id="gaugeNeedle" x1="50" y1="50" x2="50" y2="20" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="50" cy="50" r="5" fill="${accentColor}"/>
+                        </svg>
+                    `;
+                    const arc = document.getElementById('gaugeArc');
+                    const needle = document.getElementById('gaugeNeedle');
+                    
+                    function animateGauge() {
+                        const pressureVal = currentTelemetryValues[1] ? currentTelemetryValues[1].currentValue : 1.9;
+                        const percent = (pressureVal - 1.5) / 1.0;
+                        const limitedPercent = Math.max(0, Math.min(1, percent));
+                        
+                        const angle = -135 + limitedPercent * 270;
+                        needle.setAttribute('transform', `rotate(${angle} 50 50)`);
+                        
+                        const offset = 188 - (188 * limitedPercent * 0.75);
+                        arc.setAttribute('stroke-dashoffset', offset);
+                        
+                        animationFrameId = requestAnimationFrame(animateGauge);
+                    }
+                    animateGauge();
+
+                } else if (type === 'eolica' || type === 'eolica_waves') {
+                    // Ondas de flujo de aire del Efecto Venturi
+                    scadaVisualizer.innerHTML = `
+                        <svg width="100%" height="100%" viewBox="0 0 100 50" style="background:#02050b;">
+                            <path id="windLine1" fill="none" stroke="${accentColor}" stroke-width="1.2" opacity="0.8" d=""/>
+                            <path id="windLine2" fill="none" stroke="${accentColor}" stroke-width="0.8" opacity="0.5" d=""/>
+                            <path id="windLine3" fill="none" stroke="${accentColor}" stroke-width="1" opacity="0.6" d=""/>
+                        </svg>
+                    `;
+                    const l1 = document.getElementById('windLine1');
+                    const l2 = document.getElementById('windLine2');
+                    const l3 = document.getElementById('windLine3');
+                    let t = 0;
+                    
+                    function animateWind() {
+                        t += 0.12;
+                        const windSpeed = currentTelemetryValues[1] ? currentTelemetryValues[1].currentValue : 6.4;
+                        const speedFactor = windSpeed * 0.015;
+                        
+                        let p1 = [], p2 = [], p3 = [];
+                        for (let x = 0; x <= 100; x += 4) {
+                            const y1 = 15 + 4 * Math.sin((x * 0.1) - t * speedFactor * 1.5);
+                            const y2 = 25 + 2 * Math.cos((x * 0.08) - t * speedFactor * 1.2);
+                            const y3 = 35 + 3 * Math.sin((x * 0.12) - t * speedFactor * 1.8);
+                            p1.push(`${x},${y1}`);
+                            p2.push(`${x},${y2}`);
+                            p3.push(`${x},${y3}`);
+                        }
+                        l1.setAttribute('d', `M ${p1.join(' L ')}`);
+                        l2.setAttribute('d', `M ${p2.join(' L ')}`);
+                        l3.setAttribute('d', `M ${p3.join(' L ')}`);
+                        animationFrameId = requestAnimationFrame(animateWind);
+                    }
+                    animateWind();
+
+                } else if (type === 'maqueta' || type === 'maqueta_detail' || type === 'maqueta_dron' || type === 'maqueta_sensors') {
+                    // Ecualizador de tres barras de sensores de confort (Temp, Hum, CO2)
+                    scadaVisualizer.innerHTML = `
+                        <svg width="100%" height="100%" viewBox="0 0 120 60" style="background:#02050b;">
+                            <rect x="20" y="10" width="16" height="40" rx="2" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+                            <rect x="52" y="10" width="16" height="40" rx="2" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+                            <rect x="84" y="10" width="16" height="40" rx="2" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+                            
+                            <rect id="sensorBar1" x="20" y="25" width="16" height="25" rx="2" fill="#86efac"/>
+                            <rect id="sensorBar2" x="52" y="20" width="16" height="30" rx="2" fill="#00d2dc"/>
+                            <rect id="sensorBar3" x="84" y="30" width="16" height="20" rx="2" fill="#ff7849"/>
+                            
+                            <text x="28" y="56" fill="rgba(255,255,255,0.4)" font-size="5" text-anchor="middle" font-weight="600">TEMP</text>
+                            <text x="60" y="56" fill="rgba(255,255,255,0.4)" font-size="5" text-anchor="middle" font-weight="600">HUM</text>
+                            <text x="92" y="56" fill="rgba(255,255,255,0.4)" font-size="5" text-anchor="middle" font-weight="600">CO2</text>
+                        </svg>
+                    `;
+                    const b1 = document.getElementById('sensorBar1');
+                    const b2 = document.getElementById('sensorBar2');
+                    const b3 = document.getElementById('sensorBar3');
+                    
+                    function animateBars() {
+                        let tVal = 19.4, hVal = 54.8, cVal = 382;
+                        
+                        if (currentTelemetryValues[0] && !currentTelemetryValues[0].static) {
+                            tVal = currentTelemetryValues[0].currentValue;
+                            hVal = currentTelemetryValues[1].currentValue;
+                            cVal = currentTelemetryValues[2].currentValue;
+                        }
+                        
+                        const tPercent = Math.max(0, Math.min(1, (tVal - 15) / 10));
+                        const hPercent = Math.max(0, Math.min(1, (hVal - 40) / 30));
+                        const cPercent = Math.max(0, Math.min(1, (cVal - 300) / 200));
+                        
+                        const h1 = tPercent * 36;
+                        b1.setAttribute('height', h1);
+                        b1.setAttribute('y', 50 - h1);
+                        
+                        const h2 = hPercent * 36;
+                        b2.setAttribute('height', h2);
+                        b2.setAttribute('y', 50 - h2);
+                        
+                        const h3 = cPercent * 36;
+                        b3.setAttribute('height', h3);
+                        b3.setAttribute('y', 50 - h3);
+                        
+                        animationFrameId = requestAnimationFrame(animateBars);
+                    }
+                    animateBars();
+                }
+            }
+
+            // ============================================================
+            // 🕹️ LÓGICA DE CONTROL (PLAY / PAUSA / PANTALLA COMPLETA)
             // ============================================================
             function togglePlay() {
                 if (activePlayer.paused) {
                     activePlayer.play().then(() => {
                         playOverlay.classList.remove('visible');
-                        showStatusIndicator('REPRODUCCIÓN REANUDADA');
+                        showStatusIndicator('BUCLE REANUDADO');
                     });
                 } else {
                     activePlayer.pause();
-                    showStatusIndicator('PAUSA (AUTO-PLAY DETENIDO)');
+                    showStatusIndicator('PAUSADO (BUCLE DETENIDO)');
                 }
             }
 
@@ -466,7 +1025,7 @@
                     if (document.documentElement.requestFullscreen) {
                         document.documentElement.requestFullscreen();
                     } else if (document.documentElement.webkitRequestFullscreen) {
-                        document.documentElement.webkitRequestFullscreen(); // Safari
+                        document.documentElement.webkitRequestFullscreen();
                     }
                 } else {
                     if (document.exitFullscreen) {
@@ -475,27 +1034,29 @@
                 }
             }
 
-            // Clic permite forzar el avance manual (por si se desea saltar un clip largo)
+            // ============================================================
+            // ⌨️ ASIGNACIÓN DE EVENTOS (TECLADO & RATÓN)
+            // ============================================================
+
+            // Clic en el video avanza diapositiva manualmente si se quiere omitir en el bucle
             container.addEventListener('click', (e) => {
-                if (e.target.closest('#overlayPlayBtn') || playOverlay.classList.contains('visible')) return;
+                if (e.target.closest('#overlayPlayBtn') || playOverlay.classList.contains('visible') || e.target.closest('.scada-panel')) return;
                 
                 const nextSlide = (currentSlide < totalSlides - 1) ? (currentSlide + 1) : 0;
                 goToSlide(nextSlide);
             });
 
-            // Doble clic activa pantalla completa
+            // Doble clic en cualquier parte (excepto panel) activa pantalla completa
             container.addEventListener('dblclick', (e) => {
-                if (e.target.closest('#overlayPlayBtn')) return;
+                if (e.target.closest('#overlayPlayBtn') || e.target.closest('.scada-panel')) return;
                 toggleFullscreen();
             });
 
-            // Botón de play inicial si hay bloqueo de políticas de medios
             overlayPlayBtn.addEventListener('click', () => {
                 playOverlay.classList.remove('visible');
                 activePlayer.play();
             });
 
-            // Escuchar teclas básicas de soporte
             document.addEventListener('keydown', (e) => {
                 switch (e.key) {
                     case 'ArrowRight':
@@ -522,7 +1083,7 @@
             });
 
             // ============================================================
-            // 🖱️ OCULTACIÓN AUTOMÁTICA DEL CURSOR DEL RATÓN
+            // 🖱  OCULTACIÓN AUTOMÁTICA DEL CURSOR DEL RATÓN
             // ============================================================
             let mouseTimer;
             
@@ -530,6 +1091,7 @@
                 document.body.classList.add('hide-cursor');
             }
 
+            // Ocultar el cursor después de 2 segundos de inactividad
             function resetMouseTimer() {
                 document.body.classList.remove('hide-cursor');
                 clearTimeout(mouseTimer);
@@ -542,7 +1104,7 @@
             resetMouseTimer();
 
             // ============================================================
-            // 🚀 INICIAR BUCLE AUTOMÁTICO EN EL SLIDE 0
+            // 🚀 INICIAR BUCLE AUTOMÁTICO E INICIALIZAR PANEL SCADA
             // ============================================================
             goToSlide(0);
         });

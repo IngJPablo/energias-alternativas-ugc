@@ -5,11 +5,11 @@
 screenshot_logo_universidad.png
 
 # 📁 Exclusiones de Privacidad y Optimización Académica
-"01 Lectura y guion/"
-"02 Control del grupo/"
-"04 Referencias base/"
-"05 Modelo Revit/"
+01 Lectura y guion/
+02 Control del grupo/
+04 Referencias base/
+05 Modelo Revit/
 
 # 🖼️ Excluir material visual redundante y conservar únicamente la imagen requerida por el index.html
-"03 Material visual y videos/*"
-!"03 Material visual y videos/Energía solar edificio sostenible v2.jpg"
+03 Material visual y videos/*
+!03 Material visual y videos/Energía solar edificio sostenible v2.jpg

@@ -3,1065 +3,1118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UGC | Energías Alternativas - Dirección de Proyecto</title>
-    <meta name="description" content="Plataforma interactiva de presentación sobre energías alternativas: solar, eólica, hidráulica, biomasa, geotérmica e hidrógeno verde. Universidad La Gran Colombia.">
-    <link rel="stylesheet" href="style.css">
+    <title>UGC | Consola SCADA de Exposición - Energías Alternativas</title>
+    <meta name="description" content="Presentación interactiva de exposición con consola SCADA y telemetría dinámica de energías para el edificio sostenible en Bogotá. Universidad La Gran Colombia.">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23030704'/%3E%3Cpath d='M32 8 52 19v16c0 12-8 20-20 25-12-5-20-13-20-25V19L32 8Z' fill='%2300913d'/%3E%3Cpath d='M22 38c9 0 17-6 20-18 2 14-5 25-18 27 5-3 8-6 10-11-4 4-8 6-12 6v-4Z' fill='white'/%3E%3C/svg%3E">
+
     <style>
-        :root {
-            --color-hydrogen: hsl(186, 100%, 44%);
-            --color-hydrogen-glow: rgba(0, 210, 220, 0.24);
-            --presentation-edge: rgba(255, 255, 255, 0.11);
-            --presentation-surface: rgba(5, 16, 10, 0.62);
+        /* ==========================================================================
+           🎨 ESTILOS PREMIUM — CONSOLA DE MANDO SCADA Y TV CINE
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            background:
-                linear-gradient(90deg, rgba(3, 7, 4, 0.95) 0%, rgba(3, 7, 4, 0.36) 42%, rgba(3, 7, 4, 0.78) 100%),
-                radial-gradient(circle at 78% 18%, rgba(0, 210, 220, 0.10), transparent 28%),
-                radial-gradient(circle at 22% 82%, rgba(245, 158, 11, 0.08), transparent 30%);
+        body, html {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            cursor: default;
+            transition: cursor 0.3s ease;
+        }
+
+        .hide-cursor {
+            cursor: none !important;
         }
 
         .presentation-container {
-            width: 900vw;
-        }
-
-        .section-slide {
-            isolation: isolate;
-        }
-
-        .section-slide::after {
-            content: "";
             position: absolute;
-            inset: 18px;
-            z-index: 1;
-            pointer-events: none;
-            border: 1px solid rgba(255, 255, 255, 0.035);
-            border-radius: 30px;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.035);
-        }
-
-        .orb-purple {
-            background: radial-gradient(circle, var(--color-ugc-green) 0%, transparent 70%);
-            width: 55vw;
-            height: 55vw;
-            top: -15vh;
-            right: -5vw;
-            animation: float-orb 28s ease-in-out infinite alternate;
-        }
-
-        .nav-dot {
-            appearance: none;
-        }
-
-        .nav-dot:focus-visible,
-        .start-button:focus-visible,
-        .slider-custom:focus-visible {
-            outline: 2px solid rgba(255, 255, 255, 0.86);
-            outline-offset: 4px;
-        }
-
-        .io-slide-counter {
-            color: rgba(255, 255, 255, 0.38);
-            text-shadow: 0 0 18px rgba(0, 200, 83, 0.22);
-        }
-
-        .presentation-progress {
-            position: fixed;
-            left: 10vw;
-            right: 10vw;
-            bottom: 30px;
-            z-index: 190;
-            height: 2px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 999px;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, #101625 0%, #000000 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
+        }
+
+        /* 📺 MARCO DE TV PREMIUM SATINADO */
+        .tv-frame {
+            position: relative;
+            width: 95vw;
+            max-width: 1420px;
+            background: #182030;
+            border: 14px solid #222c40;
+            border-radius: 36px;
+            box-shadow: 
+                0 35px 100px rgba(0, 0, 0, 0.95), 
+                0 0 60px rgba(0, 210, 220, 0.05);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* 🖥️ PANTALLA DIGITAL DIVIDIDA: 72% VIDEO | 28% SCADA */
+        .tv-screen {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #05080f;
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: row;
+        }
+
+        /* Contenedor del Video (72%) */
+        .video-viewport {
+            position: relative;
+            width: 72%;
+            height: 100%;
+            background-color: #000000;
+            overflow: hidden;
+            border-right: 2px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .slide-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            z-index: 5;
+            transition: opacity 0.75s cubic-bezier(0.25, 1, 0.5, 1);
             pointer-events: none;
         }
 
-        .presentation-progress span {
+        .slide-video.active {
+            opacity: 1;
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        /* 🛡️ BADGE DE OCLUSIÓN DE LOGO GEMINI CON LOGO UGC */
+        .gemini-cover-badge {
+            position: absolute;
+            bottom: 11%;
+            right: 4%;
+            z-index: 15;
+            background: rgba(13, 18, 30, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 8px 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.7), 
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .gemini-cover-badge img {
+            width: 135px;
+            height: auto;
             display: block;
-            width: 11.111%;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        /* 📊 PANEL DE TELEMETRÍA SCADA (28%) */
+        .scada-panel {
+            width: 28%;
             height: 100%;
-            border-radius: inherit;
-            background: linear-gradient(90deg, var(--color-ugc-light), var(--color-hydrogen), var(--color-solar));
-            box-shadow: 0 0 18px rgba(0, 210, 220, 0.42);
-            transition: width 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .hero-layout {
-            max-width: 1180px;
-        }
-
-        .hero-stage {
-            width: min(760px, 78vw);
-            margin: 0 0 2rem;
-            display: grid;
-            grid-template-columns: 1fr 1.15fr;
-            gap: 18px;
-            align-items: stretch;
-        }
-
-        .hero-system-card,
-        .hero-thesis-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.075), rgba(255,255,255,0.018));
-            border: 1px solid var(--presentation-edge);
-            border-radius: 18px;
-            padding: 18px;
-            box-shadow: 0 24px 70px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.06);
-            backdrop-filter: blur(22px);
-        }
-
-        .hero-system-card {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-
-        .energy-token {
-            min-height: 68px;
-            border-radius: 14px;
-            padding: 11px 10px;
+            background: linear-gradient(180deg, #090e1a 0%, #04060b 100%);
+            padding: 24px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            color: #fff;
-            background:
-                radial-gradient(circle at 30% 20%, color-mix(in srgb, var(--token-color) 44%, transparent), transparent 58%),
-                rgba(255,255,255,0.035);
-            border: 1px solid color-mix(in srgb, var(--token-color) 38%, transparent);
+            z-index: 20;
+            border-left: 1px solid rgba(0, 210, 220, 0.15);
+            box-shadow: inset 10px 0 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
         }
 
-        .energy-token strong {
-            font-family: var(--font-title);
-            font-size: 0.82rem;
-            letter-spacing: 0;
-            line-height: 1.1;
+        .scada-header {
+            border-bottom: 1px solid rgba(0, 210, 220, 0.2);
+            padding-bottom: 12px;
+            margin-bottom: 16px;
         }
 
-        .energy-token span {
-            width: 22px;
-            height: 22px;
-            display: grid;
-            place-items: center;
-            border-radius: 999px;
-            background: color-mix(in srgb, var(--token-color) 24%, transparent);
-            color: var(--token-color);
-            font-size: 0.78rem;
-            font-weight: 900;
+        .scada-title {
+            font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #00d2dc;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 8px rgba(0, 210, 220, 0.4);
         }
 
-        .hero-thesis-card {
+        .scada-subtitle {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-top: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Bloque de Métricas */
+        .scada-metrics {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .hero-thesis-card .thesis-label {
-            font-family: var(--font-title);
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            color: var(--color-ugc-light);
-            font-weight: 800;
-            letter-spacing: 2px;
-        }
-
-        .hero-thesis-card p {
-            margin: 0;
-            color: #dbeafe;
-            font-size: 0.98rem;
-            line-height: 1.55;
-        }
-
-        .glass-container {
-            background:
-                linear-gradient(145deg, rgba(255,255,255,0.065), rgba(255,255,255,0.018)),
-                var(--presentation-surface);
-            border-color: rgba(255,255,255,0.09);
+            gap: 16px;
+            flex-grow: 1;
         }
 
         .metric-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 12px;
-            background: rgba(255,255,255,0.028);
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background-color: var(--accent-color, #00d2dc);
+            box-shadow: 0 0 8px var(--accent-color, #00d2dc);
+        }
+
+        .metric-label {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .metric-value-container {
+            display: flex;
+            align-items: baseline;
+            margin-top: 6px;
         }
 
         .metric-value {
-            font-size: clamp(1.55rem, 3vw, 2.25rem);
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
         }
 
-        .energy-svg-box,
-        .solar-visual-box,
-        .wind-turbine-box {
-            box-shadow: 0 30px 90px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.045);
+        .metric-unit {
+            font-size: 0.8rem;
+            color: var(--accent-color, #00d2dc);
+            margin-left: 4px;
+            font-weight: 600;
         }
 
-        .hydrogen-grad {
-            background-image: linear-gradient(135deg, var(--color-hydrogen) 0%, #ffffff 100%);
+        /* Visualizador de Gráfico Dinámico */
+        .scada-visualizer {
+            height: 130px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 210, 220, 0.1);
+            border-radius: 12px;
+            margin-top: 16px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
 
-        .slider-hydrogen::-webkit-slider-thumb {
-            background: var(--color-hydrogen);
-            box-shadow: 0 0 16px var(--color-hydrogen-glow);
+        /* ⏳ BARRA DE PROGRESO DE DIAPOSITIVA (Sutil línea premium de carga) */
+        .tv-progress-bar-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 20;
         }
 
-        .section-slide:nth-of-type(1) { --slide-ambient: rgba(0, 145, 61, 0.10); }
-        .section-slide:nth-of-type(2) { --slide-ambient: rgba(245, 158, 11, 0.12); }
-        .section-slide:nth-of-type(3) { --slide-ambient: rgba(20, 184, 166, 0.11); }
-        .section-slide:nth-of-type(4) { --slide-ambient: rgba(14, 165, 233, 0.12); }
-        .section-slide:nth-of-type(5) { --slide-ambient: rgba(134, 239, 172, 0.10); }
-        .section-slide:nth-of-type(6) { --slide-ambient: rgba(251, 146, 60, 0.12); }
-        .section-slide:nth-of-type(7) { --slide-ambient: rgba(0, 210, 220, 0.12); }
-        .section-slide:nth-of-type(8) { --slide-ambient: rgba(0, 145, 61, 0.09); }
-        .section-slide:nth-of-type(9) { --slide-ambient: rgba(0, 145, 61, 0.08); }
+        .tv-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00913d 0%, #00d2dc 100%);
+            transition: width 0.1s linear;
+        }
 
-        @media (max-width: 980px) {
-            body {
-                overflow: auto;
+        /* 📻 BISEL INFERIOR DIGITAL CON BRANDING */
+        .tv-bezel-bottom {
+            height: 46px;
+            background: linear-gradient(180deg, #182030 0%, #0d121c 100%);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            user-select: none;
+        }
+
+        .tv-brand {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0.35) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tv-status-badge {
+            font-size: 0.55rem;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 12px;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .tv-right-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .tv-power-led {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #10b981;
+            box-shadow: 
+                0 0 8px #10b981, 
+                0 0 16px rgba(16, 185, 129, 0.6);
+            animation: pulse-led 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse-led {
+            0%, 100% {
+                opacity: 0.7;
+                box-shadow: 0 0 6px #10b981, 0 0 12px rgba(16, 185, 129, 0.4);
             }
-
-            .presentation-container {
-                display: block;
-                width: 100%;
-                height: auto;
-                transform: none !important;
-            }
-
-            .section-slide {
-                min-height: 100svh;
-                height: auto;
-                width: 100%;
-                padding: 72px 22px 84px;
-            }
-
-            .navigation-sidebar,
-            .io-slide-counter,
-            .presentation-progress {
-                display: none;
-            }
-
-            .split-content,
-            .bitacora-layout,
-            .hero-stage {
-                grid-template-columns: 1fr !important;
-                height: auto !important;
-                width: 100%;
-            }
-
-            .hero-system-card {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .io-title-huge {
-                font-size: clamp(3.2rem, 18vw, 5rem);
-                letter-spacing: 0;
-            }
-
-            .section-title,
-            .simulator-card .section-title {
-                font-size: clamp(2rem, 10vw, 3rem) !important;
-                letter-spacing: 0 !important;
-            }
-
-            .glass-container {
-                padding: 24px;
+            50% {
+                opacity: 1;
+                box-shadow: 0 0 12px #10b981, 0 0 24px rgba(16, 185, 129, 0.8);
             }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                scroll-behavior: auto !important;
-                transition-duration: 0.01ms !important;
-            }
+        /* Overlay elegante de carga inicial o de autoplay bloqueado */
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .play-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .play-circle-btn {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2.5px solid #ffffff;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .play-circle-btn:hover {
+            transform: scale(1.1);
+            background: #ffffff;
+            color: #000000;
+            box-shadow: 0 20px 45px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Indicador visual discreto de pausa */
+        .status-indicator {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(0, 210, 220, 0.2);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #00d2dc;
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .status-indicator.visible {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
 
-    <!-- 🌌 EFECTOS DE FONDO DINÁMICOS -->
-    <div class="background-canvas">
-        <canvas id="ecoParticlesCanvas"></canvas>
-        <div class="glow-orb orb-purple"></div>
-        <div class="glow-orb orb-wind"></div>
-        <div class="glow-orb orb-solar"></div>
-    </div>
-
-    <!-- 🧭 NAV LATERAL PARA NAVEGACIÓN SPA -->
-    <nav class="navigation-sidebar" id="sidebarNav">
-        <div class="nav-indicator-line"></div>
-        <div class="nav-dot active" data-slide="0">01<span>Inicio</span></div>
-        <div class="nav-dot" data-slide="1">02<span>Solar</span></div>
-        <div class="nav-dot" data-slide="2">03<span>Eólica</span></div>
-        <div class="nav-dot" data-slide="3">04<span>Hidráulica</span></div>
-        <div class="nav-dot" data-slide="4">05<span>Biomasa</span></div>
-        <div class="nav-dot" data-slide="5">06<span>Geotérmica</span></div>
-        <div class="nav-dot" data-slide="6">07<span>Hidrógeno</span></div>
-        <div class="nav-dot" data-slide="7">08<span>Dashboard</span></div>
-        <div class="nav-dot" data-slide="8">09<span>Cronograma</span></div>
-    </nav>
-
-    <div id="slideCounter" class="io-slide-counter" aria-live="polite">01 / 09</div>
-    <div class="presentation-progress" aria-hidden="true"><span id="presentationProgressBar"></span></div>
-
-    <!-- 📦 CONTENEDOR PRINCIPAL DE DIAPOSITIVAS -->
+    <!-- 📺 CONTENEDOR PRINCIPAL CON TV CENTRADA -->
     <main class="presentation-container" id="presentationContainer">
+        
+        <!-- Indicador de Estado Temporal (Pausa/Play) -->
+        <div class="status-indicator" id="statusIndicator">CONSOLA CONECTADA</div>
 
-        <!-- ==========================================
-             SECCIÓN 1: PORTADA DYNAMIC HERO
-             ========================================== -->
-        <section class="section-slide" id="slide0">
-            <div class="hero-layout">
-                <div class="logo-container animate-item" style="--delay: 1">
-                    <span class="logo-badge ugc-badge">UNIVERSIDAD LA GRAN COLOMBIA</span>
-                    <span class="logo-badge" style="background: rgba(255,255,255,0.06); border: 1px solid var(--border-glass)">FACULTAD DE INGENIERÍA</span>
-                    <span class="logo-badge" style="background: rgba(255,255,255,0.06); border: 1px solid var(--border-glass)">DIRECCIÓN DE PROYECTO</span>
-                </div>
-                <h1 class="io-title-huge gradient-text purple-cyan-grad animate-item" style="--delay: 2">Energías<br>Alternativas</h1>
-                <p class="io-subtitle animate-item" style="--delay: 3">Una exploración interactiva y técnica de seis fuentes de energía renovable: solar, eólica, hidráulica, biomasa, geotérmica e hidrógeno verde aplicadas a infraestructura urbana sostenible.</p>
-                <div class="hero-stage animate-item" style="--delay: 3.5" aria-label="Mapa del sistema energético de la presentación">
-                    <div class="hero-system-card">
-                        <div class="energy-token" style="--token-color: var(--color-solar)"><span>S</span><strong>Solar FV</strong></div>
-                        <div class="energy-token" style="--token-color: var(--color-wind)"><span>E</span><strong>Eólica</strong></div>
-                        <div class="energy-token" style="--token-color: var(--color-hydro)"><span>H</span><strong>Hidráulica</strong></div>
-                        <div class="energy-token" style="--token-color: var(--color-biomass)"><span>B</span><strong>Biomasa</strong></div>
-                        <div class="energy-token" style="--token-color: var(--color-geo)"><span>G</span><strong>Geotérmica</strong></div>
-                        <div class="energy-token" style="--token-color: var(--color-hydrogen)"><span>H2</span><strong>Hidrógeno</strong></div>
-                    </div>
-                    <div class="hero-thesis-card">
-                        <div class="thesis-label">Tesis del proyecto</div>
-                        <p>Diseñar una infraestructura urbana capaz de integrar generación, almacenamiento y gestión energética con criterios técnicos, económicos y ambientales medibles.</p>
-                    </div>
-                </div>
-                <button class="start-button animate-item" style="--delay: 4" id="startBtn">
-                    Comenzar Presentación
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                        <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                </button>
-            </div>
-        </section>
+        <!-- 📺 ESTRUCTURA DEL TELEVISOR PREMIUM -->
+        <div class="tv-frame">
+            <!-- 🖥️ PANTALLA DIGITAL COMPLETA -->
+            <div class="tv-screen">
+                
+                <!-- 🖥️ VISTA DEL VIDEO (72%) -->
+                <div class="video-viewport">
+                    <!-- Reproductor 1 -->
+                    <video id="video1" class="slide-video active" muted playsinline loop></video>
+                    
+                    <!-- Reproductor 2 -->
+                    <video id="video2" class="slide-video" muted playsinline loop></video>
 
-        <!-- ==========================================
-             ☀️ SECCIÓN 2: ENERGÍA SOLAR INTERACTIVA
-             ========================================== -->
-        <section class="section-slide" id="slide1">
-            <div class="split-content">
-                <div class="solar-visual-box animate-item" style="--delay: 1">
-                    <div class="solar-glow-effect" id="solarGlow"></div>
-                    <img src="03 Material visual y videos/Energía solar edificio sostenible v2.jpg" alt="Edificio Solar Sostenible" class="solar-render-image" id="solarImg">
-                </div>
-                <div class="glass-container animate-item" style="--delay: 2">
-                    <span class="section-tag animate-item" style="--delay: 2.5">Módulo Solar</span>
-                    <h2 class="section-title gradient-text solar-grad animate-item" style="--delay: 3">Energía Solar<br>Fotovoltaica</h2>
-                    <p class="animate-item" style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 18px; --delay: 3.5">
-                        Integración de paneles fotovoltaicos en fachadas y cubiertas de edificaciones urbanas. Los módulos de silicio monocristalino convierten la radiación solar directa y difusa en electricidad mediante el efecto fotoeléctrico, reduciendo hasta un 60% el consumo de la red convencional.
-                    </p>
-                    <div class="metric-grid animate-item" style="--delay: 4">
-                        <div class="metric-card">
-                            <div class="metric-value solar-value" id="solarPowerVal">340 W</div>
-                            <div class="metric-label">Generación Estimada</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value" style="color: var(--color-eco);" id="solarEfficiencyVal">21.8%</div>
-                            <div class="metric-label">Eficiencia Panel</div>
-                        </div>
+                    <!-- 🛡️ BADGE DE OCLUSIÓN DE LOGO GEMINI CON LOGO INSTITUCIONAL UGC -->
+                    <div class="gemini-cover-badge">
+                        <img src="Logo-blanco-horizontal UGC.webp" alt="Logo Universidad La Gran Colombia">
                     </div>
-                    <div class="interactive-slider-box animate-item" style="--delay: 4.5">
-                        <label for="solarSlider">
-                            <span>Simular Radiación Solar</span>
-                            <span style="color: var(--color-solar); font-weight: 600;" id="solarIntensityLabel">750 W/m²</span>
-                        </label>
-                        <input type="range" id="solarSlider" class="slider-custom" min="0" max="1200" value="750">
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- ==========================================
-             🌀 SECCIÓN 3: ENERGÍA EÓLICA
-             ========================================== -->
-        <section class="section-slide" id="slide2">
-            <div class="split-content">
-                <div class="wind-turbine-box animate-item" style="--delay: 1">
-                    <div class="svg-turbine-container">
-                        <svg viewBox="0 0 400 400" width="100%" height="100%">
-                            <rect x="195" y="150" width="10" height="200" rx="3" class="turbine-tower" />
-                            <path d="M 180 350 L 220 350 L 210 345 L 190 345 Z" fill="#334155" />
-                            <circle cx="200" cy="150" r="14" fill="#64748b" stroke="#334155" stroke-width="2" />
-                            <g id="turbineBlades" class="turbine-blades">
-                                <path d="M 200 150 Q 205 70 200 20 Q 195 70 200 150 Z" />
-                                <path d="M 200 150 Q 265 190 312 218 Q 255 180 200 150 Z" />
-                                <path d="M 200 150 Q 135 190 88 218 Q 145 180 200 150 Z" />
-                                <circle cx="200" cy="150" r="6" fill="#fff" />
-                            </g>
+                    <!-- ⏳ BARRA DE PROGRESO DE EXPOSICIÓN -->
+                    <div class="tv-progress-bar-container">
+                        <div class="tv-progress-bar" id="progressBar"></div>
+                    </div>
+                </div>
+
+                <!-- 📊 PANEL SCADA HOLOGRÁFICO DE TELEMETRÍA (28%) -->
+                <div class="scada-panel">
+                    <div class="scada-header">
+                        <div class="scada-title" id="scadaTitle">CONSOLA SCADA</div>
+                        <div class="scada-subtitle" id="scadaSubtitle">EDIFICIO SOSTENIBLE</div>
+                    </div>
+                    
+                    <!-- Métricas de Telemetría Dinámicas -->
+                    <div class="scada-metrics" id="scadaMetrics">
+                        <!-- Renderizado en caliente por JS -->
+                    </div>
+                    
+                    <!-- Gráfico SVG Animado en Caliente -->
+                    <div class="scada-visualizer" id="scadaVisualizer">
+                        <!-- Renderizado dinámico por JS -->
+                    </div>
+                </div>
+
+                <!-- Overlay de Inicio en caso de Autoplay bloqueado por el navegador -->
+                <div class="play-overlay" id="playOverlay">
+                    <button class="play-circle-btn" id="overlayPlayBtn" aria-label="Iniciar presentación">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="currentColor" style="margin-left: 4px;">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
                         </svg>
-                    </div>
+                    </button>
                 </div>
-                <div class="glass-container animate-item" style="--delay: 2">
-                    <span class="section-tag animate-item" style="color: var(--color-wind); --delay: 2.5">Módulo Eólico</span>
-                    <h2 class="section-title gradient-text wind-eco-grad animate-item" style="--delay: 3">Turbinas Urbanas<br>de Eje Horizontal</h2>
-                    <p class="animate-item" style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 18px; --delay: 3.5">
-                        Sistemas de microgeneración eólica integrados en la envolvente de edificaciones de alta densidad. Diseñados para aprovechar el efecto Venturi en cornisas y terrazas, con aspas de perfil NACA-4412 y alternadores de imanes permanentes con arranque a 1.5 m/s.
-                    </p>
-                    <div class="metric-grid animate-item" style="--delay: 4">
-                        <div class="metric-card">
-                            <div class="metric-value wind-value" id="windPowerVal">180 W</div>
-                            <div class="metric-label">Generación Estimada</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value" style="color: var(--color-eco);" id="windFrequencyVal">12.5 Hz</div>
-                            <div class="metric-label">Frecuencia Rotor</div>
-                        </div>
-                    </div>
-                    <div class="interactive-slider-box animate-item" style="--delay: 4.5">
-                        <label for="windSlider">
-                            <span>Simular Velocidad de Viento</span>
-                            <span style="color: var(--color-wind); font-weight: 600;" id="windIntensityLabel">6.5 m/s</span>
-                        </label>
-                        <input type="range" id="windSlider" class="slider-custom slider-wind" min="0" max="25" value="6.5" step="0.5">
-                    </div>
+
+            </div>
+
+            <!-- 📻 BISEL INFERIOR METÁLICO -->
+            <div class="tv-bezel-bottom">
+                <span class="tv-brand">Universidad La Gran Colombia — Facultad de Ingeniería</span>
+                <div class="tv-right-info">
+                    <span class="tv-status-badge">SISTEMA SCADA MÓVIL</span>
+                    <span class="tv-power-led" title="Sistema Activo"></span>
                 </div>
             </div>
-        </section>
-
-        <!-- ==========================================
-             💧 SECCIÓN 4: ENERGÍA HIDRÁULICA
-             ========================================== -->
-        <section class="section-slide" id="slide3">
-            <div class="split-content">
-                <!-- SVG Minicentral Hidráulica -->
-                <div class="energy-svg-box animate-item" style="--delay: 1">
-                    <div class="energy-svg-container">
-                        <svg viewBox="0 0 400 380" width="100%" height="100%">
-                            <defs>
-                                <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.9"/>
-                                    <stop offset="100%" stop-color="#0c4a6e" stop-opacity="0.8"/>
-                                </linearGradient>
-                                <linearGradient id="waterGrad2" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.7"/>
-                                    <stop offset="100%" stop-color="#0369a1" stop-opacity="0.5"/>
-                                </linearGradient>
-                            </defs>
-                            <!-- Terreno montañoso -->
-                            <path d="M 0 200 Q 80 120 160 180 Q 200 150 240 170 L 240 380 L 0 380 Z" fill="#1e293b" opacity="0.7"/>
-                            <!-- Embalse de agua -->
-                            <rect x="0" y="155" width="240" height="50" fill="url(#waterGrad)" rx="4"/>
-                            <rect x="0" y="155" width="240" height="12" fill="#7dd3fc" opacity="0.5" rx="4"/>
-                            <!-- Presa / Dique -->
-                            <rect x="235" y="130" width="18" height="115" fill="#475569" rx="3"/>
-                            <rect x="237" y="130" width="6" height="115" fill="#64748b" rx="2"/>
-                            <!-- Tubería de presión (penstock) -->
-                            <line x1="244" y1="180" x2="310" y2="265" stroke="#94a3b8" stroke-width="12" stroke-linecap="round"/>
-                            <line x1="244" y1="180" x2="310" y2="265" stroke="#0ea5e9" stroke-width="7" stroke-linecap="round" opacity="0.5" stroke-dasharray="12 6">
-                                <animate attributeName="stroke-dashoffset" from="0" to="-18" dur="0.6s" repeatCount="indefinite"/>
-                            </line>
-                            <!-- Casa de máquinas -->
-                            <rect x="298" y="258" width="82" height="65" fill="#334155" rx="6"/>
-                            <rect x="300" y="260" width="78" height="28" fill="#475569" rx="4"/>
-                            <!-- Turbina/Generador giratorio -->
-                            <circle cx="339" cy="291" r="22" fill="#1e40af" stroke="#3b82f6" stroke-width="2"/>
-                            <g id="hydroGenerator" style="transform-origin: 339px 291px; animation: spin-generator 2s linear infinite;">
-                                <line x1="339" y1="275" x2="339" y2="269" stroke="#93c5fd" stroke-width="3"/>
-                                <line x1="352" y1="284" x2="357" y2="280" stroke="#93c5fd" stroke-width="3"/>
-                                <line x1="352" y1="298" x2="357" y2="302" stroke="#93c5fd" stroke-width="3"/>
-                                <line x1="339" y1="307" x2="339" y2="313" stroke="#93c5fd" stroke-width="3"/>
-                                <line x1="326" y1="298" x2="321" y2="302" stroke="#93c5fd" stroke-width="3"/>
-                                <line x1="326" y1="284" x2="321" y2="280" stroke="#93c5fd" stroke-width="3"/>
-                            </g>
-                            <!-- Descarga de agua -->
-                            <path d="M 380 300 Q 390 305 395 320 L 400 380 L 370 380 Q 368 340 360 318 Z" fill="url(#waterGrad2)" opacity="0.8"/>
-                            <!-- Río -->
-                            <rect x="320" y="345" width="80" height="35" fill="url(#waterGrad2)" rx="4" opacity="0.6"/>
-                            <!-- Etiquetas -->
-                            <text x="120" y="145" fill="#7dd3fc" font-size="11" text-anchor="middle" font-family="var(--font-title)" font-weight="600">EMBALSE</text>
-                            <text x="246" y="122" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="var(--font-title)">PRESA</text>
-                            <text x="339" y="335" fill="#93c5fd" font-size="10" text-anchor="middle" font-family="var(--font-title)" font-weight="600">TURBINA PELTON</text>
-                        </svg>
-                    </div>
-                </div>
-                <!-- Datos e Interactividad -->
-                <div class="glass-container animate-item" style="--delay: 2">
-                    <span class="section-tag animate-item" style="color: var(--color-hydro); --delay: 2.5">Módulo Hidráulico</span>
-                    <h2 class="section-title gradient-text hydro-grad animate-item" style="--delay: 3">Energía<br>Hidráulica</h2>
-                    <p class="animate-item" style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 18px; --delay: 3.5">
-                        Las microcentrales de pico-hidro aprovechan la energía potencial del agua en canales de riego, acueductos y corrientes urbanas. Una turbina Pelton convierte la presión hidrostática en rotación mecánica con eficiencias superiores al 85%. Sin emisiones y operación continua las 24 horas.
-                    </p>
-                    <div class="metric-grid animate-item" style="--delay: 4">
-                        <div class="metric-card">
-                            <div class="metric-value hydro-value" id="hydroPowerVal">0 W</div>
-                            <div class="metric-label">Potencia Generada</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value" style="color: var(--color-eco);" id="hydroEfficiencyVal">85.0%</div>
-                            <div class="metric-label">Eficiencia Turbina</div>
-                        </div>
-                    </div>
-                    <div class="interactive-slider-box animate-item" style="--delay: 4.5">
-                        <label for="hydroSlider">
-                            <span>Simular Caudal de Agua</span>
-                            <span style="color: var(--color-hydro); font-weight: 600;" id="hydroFlowLabel">0.0 m³/s</span>
-                        </label>
-                        <input type="range" id="hydroSlider" class="slider-custom slider-hydro" min="0" max="15" value="0" step="0.1">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==========================================
-             🌿 SECCIÓN 5: BIOMASA Y BIOGÁS
-             ========================================== -->
-        <section class="section-slide" id="slide4">
-            <div class="split-content">
-                <!-- SVG Digestor Anaeróbico -->
-                <div class="energy-svg-box animate-item" style="--delay: 1">
-                    <div class="energy-svg-container">
-                        <svg viewBox="0 0 400 380" width="100%" height="100%">
-                            <defs>
-                                <linearGradient id="digestorGrad" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stop-color="#4a1942"/>
-                                    <stop offset="100%" stop-color="#2d6a4f"/>
-                                </linearGradient>
-                            </defs>
-                            <!-- Suelo -->
-                            <rect x="0" y="310" width="400" height="70" fill="#1e293b" rx="4" opacity="0.8"/>
-                            <!-- Digestor principal (tanque cilíndrico enterrado) -->
-                            <ellipse cx="200" cy="200" rx="110" ry="115" fill="#1a3a2a" stroke="#22c55e" stroke-width="2" opacity="0.9"/>
-                            <ellipse cx="200" cy="100" rx="110" ry="30" fill="#166534" opacity="0.9"/>
-                            <!-- Contenido orgánico (parte baja) -->
-                            <ellipse cx="200" cy="260" rx="100" ry="28" fill="#15803d" opacity="0.6"/>
-                            <rect x="100" y="215" width="200" height="50" fill="#15803d" opacity="0.4"/>
-                            <!-- Burbuja de biogás animadas -->
-                            <circle cx="175" cy="200" r="6" fill="#a3e635" opacity="0.7">
-                                <animateTransform attributeName="transform" type="translate" values="0,0; -5,-50; 0,-100" dur="2.2s" repeatCount="indefinite"/>
-                                <animate attributeName="opacity" values="0.7;0.9;0" dur="2.2s" repeatCount="indefinite"/>
-                                <animate attributeName="r" values="6;8;3" dur="2.2s" repeatCount="indefinite"/>
-                            </circle>
-                            <circle cx="210" cy="220" r="9" fill="#86efac" opacity="0.6">
-                                <animateTransform attributeName="transform" type="translate" values="0,0; 8,-65; 5,-120" dur="2.8s" repeatCount="indefinite"/>
-                                <animate attributeName="opacity" values="0.6;0.8;0" dur="2.8s" repeatCount="indefinite"/>
-                                <animate attributeName="r" values="9;12;4" dur="2.8s" repeatCount="indefinite"/>
-                            </circle>
-                            <circle cx="230" cy="190" r="5" fill="#a3e635" opacity="0.8">
-                                <animateTransform attributeName="transform" type="translate" values="0,0; 3,-40; 6,-90" dur="1.9s" repeatCount="indefinite"/>
-                                <animate attributeName="opacity" values="0.8;1;0" dur="1.9s" repeatCount="indefinite"/>
-                            </circle>
-                            <circle cx="190" cy="235" r="7" fill="#4ade80" opacity="0.7">
-                                <animateTransform attributeName="transform" type="translate" values="0,0; -4,-55; -2,-105" dur="2.5s" repeatCount="indefinite"/>
-                                <animate attributeName="opacity" values="0.7;0.9;0" dur="2.5s" repeatCount="indefinite"/>
-                            </circle>
-                            <!-- Tubo de captura de biogás -->
-                            <rect x="190" y="68" width="20" height="42" fill="#64748b" rx="4"/>
-                            <!-- Quemador/Generador de biogás -->
-                            <rect x="285" y="90" width="75" height="50" fill="#1e293b" stroke="#86efac" stroke-width="1.5" rx="8"/>
-                            <text x="323" y="110" fill="#86efac" font-size="9" text-anchor="middle" font-family="var(--font-title)" font-weight="700">BIOGÁS</text>
-                            <text x="323" y="125" fill="#4ade80" font-size="8" text-anchor="middle" font-family="var(--font-title)">CH₄ + CO₂</text>
-                            <!-- Tubería de gas -->
-                            <line x1="210" y1="85" x2="285" y2="115" stroke="#86efac" stroke-width="3" stroke-dasharray="6 4">
-                                <animate attributeName="stroke-dashoffset" from="0" to="-10" dur="0.5s" repeatCount="indefinite"/>
-                            </line>
-                            <!-- Tolva de entrada -->
-                            <path d="M 50 90 L 105 110 L 95 150 L 60 150 Z" fill="#334155" stroke="#475569" stroke-width="1.5"/>
-                            <rect x="60" y="148" width="35" height="55" fill="#475569" rx="3"/>
-                            <!-- Etiquetas -->
-                            <text x="200" y="375" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="var(--font-title)" font-weight="600">DIGESTOR ANAERÓBICO</text>
-                            <text x="80" y="85" fill="#86efac" font-size="10" text-anchor="middle" font-family="var(--font-title)">BIOMASA</text>
-                        </svg>
-                    </div>
-                </div>
-                <!-- Datos e Interactividad -->
-                <div class="glass-container animate-item" style="--delay: 2">
-                    <span class="section-tag animate-item" style="color: var(--color-biomass); --delay: 2.5">Módulo Biomasa</span>
-                    <h2 class="section-title gradient-text biomass-grad animate-item" style="--delay: 3">Biomasa<br>y Biogás</h2>
-                    <p class="animate-item" style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 18px; --delay: 3.5">
-                        La digestión anaeróbica de residuos orgánicos (agrícolas, urbanos y agroalimentarios) produce biogás compuesto de metano (CH₄) y dióxido de carbono (CO₂). Este biogás alimenta generadores eléctricos o se purifica a biometano para inyección en la red de gas natural. Es carbono-neutral y aprovecha residuos.
-                    </p>
-                    <div class="metric-grid animate-item" style="--delay: 4">
-                        <div class="metric-card">
-                            <div class="metric-value biomass-value" id="biomassPowerVal">0 W</div>
-                            <div class="metric-label">Potencia Eléctrica</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value" style="color: var(--color-eco);" id="biomassGasVal">0.0 m³/día</div>
-                            <div class="metric-label">Producción de Biogás</div>
-                        </div>
-                    </div>
-                    <div class="interactive-slider-box animate-item" style="--delay: 4.5">
-                        <label for="biomassSlider">
-                            <span>Carga Orgánica Diaria</span>
-                            <span style="color: var(--color-biomass); font-weight: 600;" id="biomassLoadLabel">0 kg/día</span>
-                        </label>
-                        <input type="range" id="biomassSlider" class="slider-custom slider-biomass" min="0" max="500" value="0" step="5">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==========================================
-             🌋 SECCIÓN 6: ENERGÍA GEOTÉRMICA
-             ========================================== -->
-        <section class="section-slide" id="slide5">
-            <div class="split-content">
-                <!-- SVG Corte Geotérmico -->
-                <div class="energy-svg-box animate-item" style="--delay: 1">
-                    <div class="energy-svg-container" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                        <svg viewBox="0 -30 400 410" width="90%" height="90%" style="overflow: visible;">
-                            <defs>
-                                <linearGradient id="geoGrad" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stop-color="#1e3a5f"/>
-                                    <stop offset="40%" stop-color="#7c3a10"/>
-                                    <stop offset="80%" stop-color="#b91c1c"/>
-                                    <stop offset="100%" stop-color="#dc2626"/>
-                                </linearGradient>
-                            </defs>
-                            <!-- Capas del suelo (comienzan en Y=65 para dejar cielo arriba) -->
-                            <rect x="0" y="65" width="400" height="315" fill="url(#geoGrad)" rx="8"/>
-                            <!-- Capa superficial -->
-                            <rect x="0" y="65" width="400" height="45" fill="#1e293b" opacity="0.9" rx="4"/>
-                            <rect x="0" y="110" width="400" height="35" fill="#374151" opacity="0.7"/>
-                            <!-- Roca sedimentaria -->
-                            <rect x="0" y="145" width="400" height="55" fill="#4b2d14" opacity="0.8"/>
-                            <!-- Roca caliente -->
-                            <rect x="0" y="200" width="400" height="180" fill="#7c1d1d" opacity="0.7" rx="0"/>
-                            <!-- Etiquetas de capas -->
-                            <text x="320" y="92" fill="#94a3b8" font-size="10" text-anchor="middle" font-family="var(--font-title)">15-20°C</text>
-                            <text x="320" y="178" fill="#f59e0b" font-size="10" text-anchor="middle" font-family="var(--font-title)">40-60°C</text>
-                            <text x="320" y="290" fill="#f87171" font-size="10" text-anchor="middle" font-family="var(--font-title)">80-150°C</text>
-                            <!-- Pozo de inyección (frío) -->
-                            <rect x="95" y="47" width="12" height="293" fill="#bfdbfe" rx="4" opacity="0.7"/>
-                            <rect x="97" y="47" width="8" height="293" fill="#60a5fa" rx="3" opacity="0.5">
-                                <animate attributeName="opacity" values="0.5;0.8;0.5" dur="3s" repeatCount="indefinite"/>
-                            </rect>
-                            <text x="101" y="18" fill="#93c5fd" font-size="9" text-anchor="middle" font-family="var(--font-title)" font-weight="700">FRÍO</text>
-                            <!-- Pozo de producción (caliente) -->
-                            <rect x="293" y="47" width="12" height="303" fill="#fca5a5" rx="4" opacity="0.7"/>
-                            <rect x="295" y="47" width="8" height="303" fill="#f87171" rx="3" opacity="0.6">
-                                <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>
-                            </rect>
-                            <text x="299" y="18" fill="#fca5a5" font-size="9" text-anchor="middle" font-family="var(--font-title)" font-weight="700">CALOR</text>
-                            <!-- Intercambiador de calor en superficie -->
-                            <rect x="70" y="25" width="260" height="22" fill="#0f172a" stroke="#f97316" stroke-width="1.5" rx="6"/>
-                            <text x="200" y="39" fill="#fb923c" font-size="9" text-anchor="middle" font-family="var(--font-title)" font-weight="700">BOMBA DE CALOR / GENERADOR</text>
-                            <!-- Fluido en roca caliente (circulación) -->
-                            <path d="M 101 340 Q 200 370 299 350" stroke="#fb923c" stroke-width="4" fill="none" opacity="0.6" stroke-dasharray="10 5">
-                                <animate attributeName="stroke-dashoffset" from="0" to="-15" dur="0.8s" repeatCount="indefinite"/>
-                            </path>
-                            <!-- Pulso magmático -->
-                            <circle cx="200" cy="360" r="10" fill="#ef4444" opacity="0.6">
-                                <animate attributeName="r" values="10;20;10" dur="2s" repeatCount="indefinite"/>
-                                <animate attributeName="opacity" values="0.6;0.2;0.6" dur="2s" repeatCount="indefinite"/>
-                            </circle>
-                        </svg>
-                    </div>
-                </div>
-                <!-- Datos e Interactividad -->
-                <div class="glass-container animate-item" style="--delay: 2">
-                    <span class="section-tag animate-item" style="color: var(--color-geo); --delay: 2.5">Módulo Geotérmico</span>
-                    <h2 class="section-title gradient-text geo-grad animate-item" style="--delay: 3">Energía<br>Geotérmica</h2>
-                    <p class="animate-item" style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 18px; --delay: 3.5">
-                        La energía geotérmica de baja entalpía extrae el calor almacenado en las capas superficiales del subsuelo (8–25°C) mediante bombas de calor geotérmicas. El sistema de circuito cerrado circula un fluido caloportador por pozos verticales, logrando coeficientes de rendimiento (COP) de 3 a 5 veces superiores a la calefacción eléctrica convencional.
-                    </p>
-                    <div class="metric-grid animate-item" style="--delay: 4">
-                        <div class="metric-card">
-                            <div class="metric-value geo-value" id="geoCOPVal">—</div>
-                            <div class="metric-label">COP (Rendimiento)</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value" style="color: var(--color-eco);" id="geoThermalVal">0 kW</div>
-                            <div class="metric-label">Potencia Térmica</div>
-                        </div>
-                    </div>
-                    <div class="interactive-slider-box animate-item" style="--delay: 4.5">
-                        <label for="geoSlider">
-                            <span>Temperatura del Subsuelo</span>
-                            <span style="color: var(--color-geo); font-weight: 600;" id="geoTempLabel">8°C</span>
-                        </label>
-                        <input type="range" id="geoSlider" class="slider-custom slider-geo" min="8" max="150" value="8" step="1">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==========================================
-             ⚡ SECCIÓN 7: HIDRÓGENO VERDE
-             ========================================== -->
-        <section class="section-slide" id="slide6">
-            <div class="split-content">
-                <!-- SVG Electrolizador de Hidrógeno -->
-                <div class="energy-svg-box animate-item" style="--delay: 1">
-                    <div class="energy-svg-container">
-                        <svg viewBox="0 0 400 380" width="100%" height="100%">
-                            <defs>
-                                <linearGradient id="h2Grad" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stop-color="#0369a1"/>
-                                    <stop offset="100%" stop-color="#0c4a6e"/>
-                                </linearGradient>
-                            </defs>
-                            <!-- Panel solar de alimentación -->
-                            <rect x="30" y="20" width="110" height="70" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5" rx="6"/>
-                            <line x1="30" y1="42" x2="140" y2="42" stroke="#1d4ed8" stroke-width="1"/>
-                            <line x1="30" y1="64" x2="140" y2="64" stroke="#1d4ed8" stroke-width="1"/>
-                            <line x1="75" y1="20" x2="75" y2="90" stroke="#1d4ed8" stroke-width="1"/>
-                            <line x1="110" y1="20" x2="110" y2="90" stroke="#1d4ed8" stroke-width="1"/>
-                            <text x="85" y="112" fill="#60a5fa" font-size="10" text-anchor="middle" font-family="var(--font-title)" font-weight="600">ENERGÍA SOLAR</text>
-                            <!-- Cable eléctrico -->
-                            <path d="M 140 55 Q 185 55 185 100" stroke="#f59e0b" stroke-width="3" fill="none" stroke-dasharray="6 3">
-                                <animate attributeName="stroke-dashoffset" from="0" to="-9" dur="0.4s" repeatCount="indefinite"/>
-                            </path>
-                            <!-- Electrolizador (tanque principal) -->
-                            <rect x="148" y="98" width="104" height="160" fill="#0c4a6e" stroke="#00d4e0" stroke-width="2" rx="10"/>
-                            <text x="200" y="130" fill="#67e8f9" font-size="11" text-anchor="middle" font-family="var(--font-title)" font-weight="700">ELECTROLIZADOR</text>
-                            <!-- Membrana PEM -->
-                            <rect x="196" y="140" width="8" height="105" fill="#a78bfa" opacity="0.9" rx="3"/>
-                            <!-- Cátodo (H₂) lado izquierdo -->
-                            <rect x="155" y="140" width="38" height="105" fill="#0ea5e9" opacity="0.25" rx="4"/>
-                            <!-- Ánodo (O₂) lado derecho -->
-                            <rect x="207" y="140" width="38" height="105" fill="#34d399" opacity="0.2" rx="4"/>
-                            <!-- Burbujas de H₂ (izquierda) -->
-                            <circle cx="172" cy="225" r="5" fill="#67e8f9" opacity="0.8">
-                                <animateTransform attributeName="transform" type="translate" values="0,0;-3,-70" dur="1.8s" repeatCount="indefinite"/>
-                                <animate attributeName="opacity" values="0.8;0" dur="1.8s" repeatCount="indefinite"/>
-                            </circle>
-                            <circle cx="185" cy="200" r="4" fill="#22d3ee" opacity="0.7">
-                                <animateTransform attributeName="transform" type="translate" values="0,0;2,-80" dur="2.2s" repeatCount="indefinite"/>
-                                <animate attributeName="opacity" values="0.7;0" dur="2.2s" repeatCount="indefinite"/>
-                            </circle>
-                            <circle cx="165" cy="210" r="3" fill="#a5f3fc" opacity="0.9">
-                                <animateTransform attributeName="transform" type="translate" values="0,0;-1,-60" dur="1.5s" repeatCount="indefinite"/>
-                                <animate attributeName="opacity" values="0.9;0" dur="1.5s" repeatCount="indefinite"/>
-                            </circle>
-                            <!-- Burbujas de O₂ (derecha) -->
-                            <circle cx="220" cy="220" r="5" fill="#86efac" opacity="0.7">
-                                <animateTransform attributeName="transform" type="translate" values="0,0;2,-65" dur="2s" repeatCount="indefinite"/>
-                                <animate attributeName="opacity" values="0.7;0" dur="2s" repeatCount="indefinite"/>
-                            </circle>
-                            <circle cx="235" cy="195" r="3" fill="#4ade80" opacity="0.8">
-                                <animateTransform attributeName="transform" type="translate" values="0,0;4,-75" dur="2.4s" repeatCount="indefinite"/>
-                                <animate attributeName="opacity" values="0.8;0" dur="2.4s" repeatCount="indefinite"/>
-                            </circle>
-                            <!-- Tubo de H₂ salida -->
-                            <rect x="148" y="258" width="44" height="12" fill="#64748b" rx="4"/>
-                            <line x1="120" y1="264" x2="150" y2="264" stroke="#64748b" stroke-width="8" stroke-linecap="round"/>
-                            <!-- Tanque de almacenamiento H₂ -->
-                            <ellipse cx="90" cy="264" rx="32" ry="40" fill="#1e293b" stroke="#22d3ee" stroke-width="2"/>
-                            <text x="90" y="258" fill="#22d3ee" font-size="14" text-anchor="middle" font-family="var(--font-title)" font-weight="900">H₂</text>
-                            <text x="90" y="274" fill="#67e8f9" font-size="8" text-anchor="middle" font-family="var(--font-title)">350 BAR</text>
-                            <!-- Salida O₂ -->
-                            <line x1="248" y1="264" x2="300" y2="264" stroke="#64748b" stroke-width="6" stroke-linecap="round"/>
-                            <text x="330" y="268" fill="#86efac" font-size="11" font-family="var(--font-title)" font-weight="700">O₂</text>
-                            <!-- Etiquetas -->
-                            <text x="173" y="360" fill="#67e8f9" font-size="10" text-anchor="middle" font-family="var(--font-title)" font-weight="600">CÁTODO</text>
-                            <text x="227" y="360" fill="#86efac" font-size="10" text-anchor="middle" font-family="var(--font-title)" font-weight="600">ÁNODO</text>
-                        </svg>
-                    </div>
-                </div>
-                <!-- Datos e Interactividad -->
-                <div class="glass-container animate-item" style="--delay: 2">
-                    <span class="section-tag animate-item" style="color: var(--color-hydrogen); --delay: 2.5">Módulo Hidrógeno</span>
-                    <h2 class="section-title gradient-text hydrogen-grad animate-item" style="--delay: 3">Hidrógeno<br>Verde</h2>
-                    <p class="animate-item" style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 18px; --delay: 3.5">
-                        El hidrógeno verde se produce mediante electrólisis del agua (H₂O → H₂ + ½O₂) alimentada exclusivamente por energía solar o eólica. Una membrana PEM (Polímero de Intercambio de Protones) separa los gases con alta pureza. El H₂ almacenado a 350 bar puede alimentar pilas de combustible, quemadores industriales o vehículos de celda.
-                    </p>
-                    <div class="metric-grid animate-item" style="--delay: 4">
-                        <div class="metric-card">
-                            <div class="metric-value hydrogen-value" id="hydrogenProductionVal">0.0 kg/h</div>
-                            <div class="metric-label">Producción H₂</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value" style="color: var(--color-eco);" id="hydrogenEfficiencyVal">0%</div>
-                            <div class="metric-label">Eficiencia Electrólisis</div>
-                        </div>
-                    </div>
-                    <div class="interactive-slider-box animate-item" style="--delay: 4.5">
-                        <label for="hydrogenSlider">
-                            <span>Potencia de Entrada al Electrolizador</span>
-                            <span style="color: var(--color-hydrogen); font-weight: 600;" id="hydrogenPowerLabel">0 kW</span>
-                        </label>
-                        <input type="range" id="hydrogenSlider" class="slider-custom slider-hydrogen" min="0" max="100" value="0" step="1">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==========================================
-             📊 SECCIÓN 8: DASHBOARD COMPARATIVO
-             ========================================== -->
-        <section class="section-slide" id="slide7">
-            <div style="height: 100%; display: flex; flex-direction: column; justify-content: center;">
-                <span class="section-tag animate-item" style="color: var(--color-ugc-light); --delay: 1">Análisis Comparativo</span>
-                <h2 class="section-title gradient-text purple-cyan-grad animate-item" style="--delay: 2; margin-bottom: 0.5rem;">Dashboard de Energías Alternativas</h2>
-                <p class="animate-item" style="color: #94a3b8; font-size: 0.88rem; margin-bottom: 1.5rem; --delay: 2.5">Comparativa técnica y económica de las seis fuentes de energía renovable del proyecto: potencia instalable, costo de generación y factor de disponibilidad.</p>
-
-                <div class="animate-item" style="--delay: 3; display: grid; grid-template-columns: 1.4fr 0.6fr; gap: 28px; flex: 1; align-items: start;">
-                    <!-- Gráfico comparativo SVG -->
-                    <div class="glass-container" style="padding: 28px;">
-                        <div style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; font-weight: 700;">Potencia Instalable (kW) por Tecnología</div>
-                        <div class="chart-body-container" style="height: 210px;">
-                            <svg class="svg-chart-bar" viewBox="0 0 520 230">
-                                <defs>
-                                    <linearGradient id="barSolar" x1="0" y1="1" x2="0" y2="0">
-                                        <stop offset="0%" stop-color="var(--color-solar)"/>
-                                        <stop offset="100%" stop-color="#fef08a"/>
-                                    </linearGradient>
-                                    <linearGradient id="barWind" x1="0" y1="1" x2="0" y2="0">
-                                        <stop offset="0%" stop-color="var(--color-wind)"/>
-                                        <stop offset="100%" stop-color="#a5f3fc"/>
-                                    </linearGradient>
-                                    <linearGradient id="barHydro" x1="0" y1="1" x2="0" y2="0">
-                                        <stop offset="0%" stop-color="var(--color-hydro)"/>
-                                        <stop offset="100%" stop-color="#bfdbfe"/>
-                                    </linearGradient>
-                                    <linearGradient id="barBiomass" x1="0" y1="1" x2="0" y2="0">
-                                        <stop offset="0%" stop-color="var(--color-biomass)"/>
-                                        <stop offset="100%" stop-color="#fed7aa"/>
-                                    </linearGradient>
-                                    <linearGradient id="barGeo" x1="0" y1="1" x2="0" y2="0">
-                                        <stop offset="0%" stop-color="var(--color-geo)"/>
-                                        <stop offset="100%" stop-color="#fed7aa"/>
-                                    </linearGradient>
-                                    <linearGradient id="barH2" x1="0" y1="1" x2="0" y2="0">
-                                        <stop offset="0%" stop-color="var(--color-hydrogen)"/>
-                                        <stop offset="100%" stop-color="#a5f3fc"/>
-                                    </linearGradient>
-                                </defs>
-                                <line x1="40" y1="195" x2="510" y2="195" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
-                                <!-- Barras comparativas -->
-                                <rect class="chart-bar-dash" x="55"  y="55"  width="48" height="140" fill="url(#barSolar)"   rx="6" data-final-y="55"  data-final-h="140"/>
-                                <rect class="chart-bar-dash" x="130" y="85"  width="48" height="110" fill="url(#barWind)"    rx="6" data-final-y="85"  data-final-h="110"/>
-                                <rect class="chart-bar-dash" x="205" y="40"  width="48" height="155" fill="url(#barHydro)"   rx="6" data-final-y="40"  data-final-h="155"/>
-                                <rect class="chart-bar-dash" x="280" y="110" width="48" height="85"  fill="url(#barBiomass)" rx="6" data-final-y="110" data-final-h="85"/>
-                                <rect class="chart-bar-dash" x="355" y="125" width="48" height="70"  fill="url(#barGeo)"     rx="6" data-final-y="125" data-final-h="70"/>
-                                <rect class="chart-bar-dash" x="430" y="95"  width="48" height="100" fill="url(#barH2)"      rx="6" data-final-y="95"  data-final-h="100"/>
-                                <!-- Etiquetas eje X -->
-                                <text x="79"  y="215" fill="#94a3b8" font-size="9" text-anchor="middle" font-family="var(--font-title)" font-weight="600">Solar</text>
-                                <text x="154" y="215" fill="#94a3b8" font-size="9" text-anchor="middle" font-family="var(--font-title)" font-weight="600">Eólica</text>
-                                <text x="229" y="215" fill="#94a3b8" font-size="9" text-anchor="middle" font-family="var(--font-title)" font-weight="600">Hidráulica</text>
-                                <text x="304" y="215" fill="#94a3b8" font-size="9" text-anchor="middle" font-family="var(--font-title)" font-weight="600">Biomasa</text>
-                                <text x="379" y="215" fill="#94a3b8" font-size="9" text-anchor="middle" font-family="var(--font-title)" font-weight="600">Geotérmica</text>
-                                <text x="454" y="215" fill="#94a3b8" font-size="9" text-anchor="middle" font-family="var(--font-title)" font-weight="600">Hidrógeno</text>
-                                <!-- Valores -->
-                                <text x="79"  y="48"  fill="#fbbf24" font-size="10" text-anchor="middle" font-family="var(--font-title)" font-weight="700">35 kW</text>
-                                <text x="154" y="78"  fill="#5eead4" font-size="10" text-anchor="middle" font-family="var(--font-title)" font-weight="700">28 kW</text>
-                                <text x="229" y="33"  fill="#7dd3fc" font-size="10" text-anchor="middle" font-family="var(--font-title)" font-weight="700">40 kW</text>
-                                <text x="304" y="103" fill="#fdba74" font-size="10" text-anchor="middle" font-family="var(--font-title)" font-weight="700">22 kW</text>
-                                <text x="379" y="118" fill="#fb923c" font-size="10" text-anchor="middle" font-family="var(--font-title)" font-weight="700">18 kW</text>
-                                <text x="454" y="88"  fill="#22d3ee" font-size="10" text-anchor="middle" font-family="var(--font-title)" font-weight="700">25 kW</text>
-                            </svg>
-                        </div>
-                        <div class="cost-total-display" style="margin-top: 12px;">
-                            <div class="metric-label" style="margin-bottom: 2px;">Potencia Total Integrada del Sistema</div>
-                            <div class="cost-total-value">168 kW</div>
-                            <div style="font-size: 0.75rem; color: var(--color-eco); font-weight: 600;">Capacidad Combinada — Proyecto UGC</div>
-                        </div>
-                    </div>
-
-                    <!-- Tabla de indicadores -->
-                    <div class="glass-container" style="padding: 24px;">
-                        <div style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; font-weight: 700;">Indicadores Clave</div>
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: 10px; background: rgba(0,145,61,0.06); border: 1px solid rgba(0,145,61,0.15);">
-                                <span style="font-size: 0.82rem; color: #e2e8f0; font-weight: 500;">☀️ Solar</span>
-                                <span style="font-size: 0.82rem; color: var(--color-solar); font-weight: 700;">$0.04/kWh</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: 10px; background: rgba(20,184,166,0.06); border: 1px solid rgba(20,184,166,0.15);">
-                                <span style="font-size: 0.82rem; color: #e2e8f0; font-weight: 500;">💨 Eólica</span>
-                                <span style="font-size: 0.82rem; color: var(--color-wind); font-weight: 700;">$0.05/kWh</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: 10px; background: rgba(10,132,188,0.06); border: 1px solid rgba(10,132,188,0.15);">
-                                <span style="font-size: 0.82rem; color: #e2e8f0; font-weight: 500;">💧 Hidráulica</span>
-                                <span style="font-size: 0.82rem; color: var(--color-hydro); font-weight: 700;">$0.03/kWh</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: 10px; background: rgba(192,108,40,0.06); border: 1px solid rgba(192,108,40,0.15);">
-                                <span style="font-size: 0.82rem; color: #e2e8f0; font-weight: 500;">🌿 Biomasa</span>
-                                <span style="font-size: 0.82rem; color: var(--color-biomass); font-weight: 700;">$0.07/kWh</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: 10px; background: rgba(230,90,20,0.06); border: 1px solid rgba(230,90,20,0.15);">
-                                <span style="font-size: 0.82rem; color: #e2e8f0; font-weight: 500;">🌋 Geotérmica</span>
-                                <span style="font-size: 0.82rem; color: var(--color-geo); font-weight: 700;">$0.06/kWh</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: 10px; background: rgba(0,210,220,0.06); border: 1px solid rgba(0,210,220,0.15);">
-                                <span style="font-size: 0.82rem; color: #e2e8f0; font-weight: 500;">⚡ Hidrógeno</span>
-                                <span style="font-size: 0.82rem; color: var(--color-hydrogen); font-weight: 700;">$0.09/kWh</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==========================================
-             💬 SECCIÓN 9: CRONOGRAMA DE INGENIERÍA
-             ========================================== -->
-        <section class="section-slide" id="slide8">
-            <div class="bitacora-layout">
-                <div class="glass-container bitacora-timeline-card animate-item" style="--delay: 1">
-                    <span class="section-tag" style="color: var(--color-purple);">Planificación</span>
-                    <h2 class="section-title gradient-text purple-cyan-grad" style="font-size: 2.2rem; margin-bottom: 20px;">Cronograma de Ingeniería</h2>
-                    <div class="timeline-container">
-                        <div class="timeline-line"></div>
-                        <div class="timeline-item">
-                            <div class="timeline-dot" style="background: var(--color-solar);"></div>
-                            <div class="timeline-content">
-                                <div class="timeline-date">Fase 1: Viabilidad</div>
-                                <div class="timeline-title">Estudio de Viabilidad e Ingeniería Conceptual</div>
-                                <div class="timeline-desc">Evaluación técnica y económica de las seis fuentes renovables en el contexto urbano. Análisis de recurso solar, eólico, hídrico, biomásico, geotérmico e hidrógeno. Modelado financiero y estudio de recurso energético preliminar.</div>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-dot" style="background: var(--color-wind);"></div>
-                            <div class="timeline-content">
-                                <div class="timeline-date">Fase 2: Diseño 3D</div>
-                                <div class="timeline-title">Ingeniería de Detalle y Modelado BIM</div>
-                                <div class="timeline-desc">Modelado estructural en Autodesk Revit de los sistemas solar, eólico e hidráulico integrados a la edificación. Simulación CFD para aerogeneradores. Diseño de pozos geotérmicos y planta de biomasa.</div>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-dot" style="background: var(--color-hydro);"></div>
-                            <div class="timeline-content">
-                                <div class="timeline-date">Fase 3: Adquisiciones</div>
-                                <div class="timeline-title">Prototipos y Control de Calidad</div>
-                                <div class="timeline-desc">Adquisición de paneles FV, microturbinas eólicas, turbina Pelton, digestor anaeróbico, bomba de calor geotérmica y electrolizador PEM. Ensamblaje y calibración del sistema de control integrado.</div>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-dot" style="background: var(--color-geo);"></div>
-                            <div class="timeline-content">
-                                <div class="timeline-date">Fase 4: Integración</div>
-                                <div class="timeline-title">Conexión de Sistemas y Gestión Energética</div>
-                                <div class="timeline-desc">Integración del SCADA de gestión energética para despacho inteligente entre las seis fuentes. Configuración del electrolizador como almacenamiento secundario. Puesta en marcha y validación de rendimientos.</div>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-dot" style="background: var(--color-ugc-light);"></div>
-                            <div class="timeline-content">
-                                <div class="timeline-date">Fase 5: Despliegue</div>
-                                <div class="timeline-title">Dossier Técnico y Cierre del Proyecto</div>
-                                <div class="timeline-desc">Consolidación del Dossier Técnico de Ingeniería. Validación final de la viabilidad de despliegue a escala urbana comercial y presentación ante la facultad.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-container animate-item" style="display: flex; flex-direction: column; justify-content: space-between; --delay: 2">
-                    <div>
-                        <span class="section-tag animate-item" style="color: var(--color-wind); --delay: 2.5">Coordinación</span>
-                        <h2 class="section-title gradient-text wind-eco-grad animate-item" style="font-size: 2.2rem; margin-bottom: 15px; --delay: 3">Ingeniería de Campo</h2>
-                        <div class="chat-bubbles-container animate-item" style="--delay: 3.5">
-                            <div class="chat-bubble chat-bubble-left">
-                                <div class="chat-sender">📐 Diseño BIM</div>
-                                <div class="chat-text">¿Cómo integramos las seis tecnologías sin comprometer la estética arquitectónica ni la estructura portante?</div>
-                                <div class="chat-time">Análisis de Integración</div>
-                            </div>
-                            <div class="chat-bubble chat-bubble-right">
-                                <div class="chat-sender">⚡ Ingeniería</div>
-                                <div class="chat-text">Solar en cubierta y fachada sur. Eólica en cornisas efecto Venturi. Pico-hidro en red hídrica interna. Biomasa en sótano técnico. Geotérmica en pilotes de cimentación. H₂ como almacén estacional.</div>
-                                <div class="chat-time">Solución Técnica ✓</div>
-                            </div>
-                            <div class="chat-bubble chat-bubble-left">
-                                <div class="chat-sender">🔧 Control y Automatización</div>
-                                <div class="chat-text">El electrolizador PEM requiere potencia mínima de 5 kW para operar. ¿Cómo garantizamos la continuidad si hay poca generación solar y eólica?</div>
-                                <div class="chat-time">Reporte de Campo</div>
-                            </div>
-                            <div class="chat-bubble chat-bubble-right">
-                                <div class="chat-sender">⚡ Ingeniería</div>
-                                <div class="chat-text">El SCADA prioriza: 1) Red fotovoltaica, 2) Eólica, 3) Pico-hidro (continua). Si no hay suficiente, el electrolizador se apaga y se consume H₂ almacenado en pila de combustible.</div>
-                                <div class="chat-time">Resolución de Incidencia ✓</div>
-                            </div>
-                            <div class="chat-bubble chat-bubble-left">
-                                <div class="chat-sender">📊 Dirección de Proyecto</div>
-                                <div class="chat-text">¿Se mantiene el presupuesto global dentro de los márgenes aprobados considerando las seis tecnologías?</div>
-                                <div class="chat-time">Seguimiento Financiero</div>
-                            </div>
-                            <div class="chat-bubble chat-bubble-right">
-                                <div class="chat-sender">💰 Control Financiero</div>
-                                <div class="chat-text">Confirmado: Solar $35k · Eólica $28k · Hidráulica $18k · Biomasa $12k · Geotérmica $22k · H₂ Verde $30k · Integración $15k · Obra civil $10k. Total: $170,000 sin desviaciones.</div>
-                                <div class="chat-time">Presupuesto Cerrado ✓</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-lema-box animate-item" style="--delay: 4">
-                        <div class="lema-icon">🌍</div>
-                        <div>
-                            <div style="font-size: 0.8rem; color: #94a3b8; font-weight: 600; text-transform: uppercase;">Misión Estratégica</div>
-                            <div style="font-size: 1rem; font-weight: 700; color: #fff; line-height: 1.4;">"Infraestructura urbana autosuficiente: seis tecnologías renovables integradas, inteligentes y comprometidas con la neutralidad de carbono"</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </div>
 
     </main>
 
-    <!-- Script de Lógica -->
-    <script src="app.js"></script>
+    <!-- ==========================================================================
+         ⚡ LÓGICA DE CONTROL EXTREMADAMENTE ROBUSTA, DINÁMICA Y TELEMETRÍA VIVA
+         ========================================================================== -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var totalSlides = document.querySelectorAll('.section-slide').length;
-            var counter = document.getElementById('slideCounter');
-            var progressBar = document.getElementById('presentationProgressBar');
-            var navDots = Array.prototype.slice.call(document.querySelectorAll('.nav-dot'));
-            var slides = Array.prototype.slice.call(document.querySelectorAll('.section-slide'));
+        document.addEventListener('DOMContentLoaded', () => {
 
-            function currentIndex() {
-                var activeDot = document.querySelector('.nav-dot.active');
-                if (activeDot) return Number(activeDot.getAttribute('data-slide')) || 0;
-                var activeSlide = document.querySelector('.section-slide.active-slide');
-                return Math.max(0, slides.indexOf(activeSlide));
+            // ============================================================
+            // 📂 SECUENCIA DE VIDEOS EN ORDEN NUMÉRICO CORRECTO
+            // ============================================================
+            const videoClips = [
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_2.mp4',          // 1. Portada del Proyecto (Edificio Real Bogotá)
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359.mp4',            // 2. Logo Institucional
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_4.mp4',          // 3. Título Solar
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_8.mp4',          // 4. Simulación Solar
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_3.mp4',          // 5. Título Hídrica
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_5.mp4',          // 6. Simulación Hídrica
+                'Escena inicial/Wind_energy_creative_elegant_phrase_202605212216.mp4',    // 7. Título Eólica
+                'Escena inicial/Wind_turbine_in_green_field_202605212214.mp4',            // 8. Simulación Eólica
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_9.mp4',          // 9. Maqueta Exterior General
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_6.mp4',          // 10. Detalles Maqueta/Funcionamiento
+                'Escena inicial/Drone_flight_through_building_202605212209.mp4',          // 11. Nueva Maqueta (Vuelo de dron a través del edificio)
+                'Escena inicial/Escena_inicial_-_2026-05-21_202605211359_7.mp4'           // 12. Maqueta Interior
+            ];
+
+            // ============================================================
+            // 📊 BASE DE DATOS DE TELEMETRÍA REALÍSTICA Y FLUIDA
+            // ============================================================
+            const scadaDatabase = [
+                {
+                    titulo: 'SISTEMA SCADA',
+                    subtitulo: 'EDIFICIO REAL BOGOTÁ D.C.',
+                    accent: '#00d2dc',
+                    metricas: [
+                        { label: 'Ubicación Física', value: 'Bogotá D.C.', unit: '', static: true },
+                        { label: 'Altitud de Diseño', value: '2.625', unit: ' msnm', static: true },
+                        { label: 'Modelo en Revit', value: 'Estructura Real', unit: '', static: true }
+                    ],
+                    grafico: 'radar'
+                },
+                {
+                    titulo: 'MARCA DE PROYECTO',
+                    subtitulo: 'ESTUDIO ACADÉMICO UGC',
+                    accent: '#00d2dc',
+                    metricas: [
+                        { label: 'Proyecto de Grado', value: 'Hibridación Energética', unit: '', static: true },
+                        { label: 'Facultad UGC', value: 'Ingeniería Civil', unit: '', static: true },
+                        { label: 'Coordinación', value: 'Juan Pablo & Grupo', unit: '', static: true }
+                    ],
+                    grafico: 'radar'
+                },
+                {
+                    titulo: 'MÓDULO SOLAR',
+                    subtitulo: 'TECNOLOGÍA FOTOVOLTAICA',
+                    accent: '#f59e0b',
+                    metricas: [
+                        { label: 'Tipo de Células', value: 'PERC Monocristalino', unit: '', static: true },
+                        { label: 'Eficiencia de Captación', value: '22.0', unit: '%', static: true },
+                        { label: 'Distribución', value: 'Cubierta & Fachada', unit: '', static: true }
+                    ],
+                    grafico: 'solar'
+                },
+                {
+                    titulo: 'TELEMETRÍA SOLAR',
+                    subtitulo: 'PLANTA GENERADORA ACTIVA',
+                    accent: '#f59e0b',
+                    metricas: [
+                        { label: 'Irradiancia Solar', value: 755, variacion: 12, unit: ' W/m²', precision: 0 },
+                        { label: 'Generación Total', value: 4.38, variacion: 0.08, unit: ' kW', precision: 2 },
+                        { label: 'Inversor Sincrónico', value: 'SINCRO OK', unit: '', static: true }
+                    ],
+                    grafico: 'solar_waves'
+                },
+                {
+                    titulo: 'MÓDULO HÍDRICO',
+                    subtitulo: 'PICO-GENERACIÓN INTERNA',
+                    accent: '#14b8a6',
+                    metricas: [
+                        { label: 'Modelo Turbina', value: 'Micro-Pelton Escala', unit: '', static: true },
+                        { label: 'Caída de Diseño', value: '24.5', unit: ' m', static: true },
+                        { label: 'Fuente de Flujo', value: 'Pluvial & Aguas Grises', unit: '', static: true }
+                    ],
+                    grafico: 'hidro'
+                },
+                {
+                    titulo: 'TELEMETRÍA HÍDRICA',
+                    subtitulo: 'DINÁMICA DE CAUDALES',
+                    accent: '#14b8a6',
+                    metricas: [
+                        { label: 'Caudal de Paso', value: 2.22, variacion: 0.05, unit: ' L/s', precision: 2 },
+                        { label: 'Presión Hidráulica', value: 1.91, variacion: 0.03, unit: ' Bar', precision: 2 },
+                        { label: 'Generación Hídrica', value: 1.24, variacion: 0.04, unit: ' kW', precision: 2 }
+                    ],
+                    grafico: 'hidro_gauge'
+                },
+                {
+                    titulo: 'MÓDULO EÓLICO',
+                    subtitulo: 'MICRO-GENERACIÓN URBANA',
+                    accent: '#00d2dc',
+                    metricas: [
+                        { label: 'Aerogeneradores', value: 'Eje Horiz. NACA-4412', unit: '', static: true },
+                        { label: 'Arranque de Viento', value: '1.5', unit: ' m/s', static: true },
+                        { label: 'Localización', value: 'Cornisas Superiores', unit: '', static: true }
+                    ],
+                    grafico: 'eolica'
+                },
+                {
+                    titulo: 'TELEMETRÍA EÓLICA',
+                    subtitulo: 'MULTIPLICADOR DE VIENTO',
+                    accent: '#00d2dc',
+                    metricas: [
+                        { label: 'Viento Ambiental', value: 3.22, variacion: 0.15, unit: ' m/s', precision: 2 },
+                        { label: 'Viento Venturi', value: 6.44, variacion: 0.28, unit: ' m/s', precision: 2 },
+                        { label: 'Generación Eólica', value: 3.02, variacion: 0.11, unit: ' kW', precision: 2 }
+                    ],
+                    grafico: 'eolica_waves'
+                },
+                {
+                    titulo: 'PROTOTIPO MAQUETA',
+                    subtitulo: 'ESTRUCTURA INTEGRADA',
+                    accent: '#10b981',
+                    metricas: [
+                        { label: 'Escala Física', value: 'Prototipo 1:50', unit: '', static: true },
+                        { label: 'Material Estructural', value: 'Madera & PETG', unit: '', static: true },
+                        { label: 'Integración SCADA', value: 'ESP32 IoT Central', unit: '', static: true }
+                    ],
+                    grafico: 'maqueta'
+                },
+                {
+                    titulo: 'MAQUETA FÍSICA',
+                    subtitulo: 'RED DE MONITOREO SENSORIAL',
+                    accent: '#10b981',
+                    metricas: [
+                        { label: 'Iluminación Activa', value: 'MicroLED de Precisión', unit: '', static: true },
+                        { label: 'Sensores de Campo', value: 'Temp, Humedad, CO₂', unit: '', static: true },
+                        { label: 'Comunicación', value: 'WiFi - Protocolo MQTT', unit: '', static: true }
+                    ],
+                    grafico: 'maqueta_detail'
+                },
+                {
+                    titulo: 'MAQUETA ACÚSTICA',
+                    subtitulo: 'VENTILACIÓN Y CONFORT',
+                    accent: '#86efac',
+                    metricas: [
+                        { label: 'Arquitectura', value: 'Atrio Central Activo', unit: '', static: true },
+                        { label: 'Renovación de Aire', value: 'Cruzada Pasiva', unit: '', static: true },
+                        { label: 'Estudio Fluidos CFD', value: 'Simulado en Revit/CFD', unit: '', static: true }
+                    ],
+                    grafico: 'maqueta_dron'
+                },
+                {
+                    titulo: 'TELEMETRÍA INTERIOR',
+                    subtitulo: 'CONFORT FÍSICO DE CABINAS',
+                    accent: '#86efac',
+                    metricas: [
+                        { label: 'Temperatura Interior', value: 19.4, variacion: 0.15, unit: ' °C', precision: 1 },
+                        { label: 'Humedad Relativa', value: 54.8, variacion: 0.3, unit: ' %', precision: 1 },
+                        { label: 'Concentración CO₂', value: 382, variacion: 3, unit: ' ppm', precision: 0 }
+                    ],
+                    grafico: 'maqueta_sensors'
+                }
+            ];
+
+            let currentSlide = 0;
+            const totalSlides = videoClips.length;
+
+            // Elementos del DOM
+            const video1 = document.getElementById('video1');
+            const video2 = document.getElementById('video2');
+            const container = document.getElementById('presentationContainer');
+            const playOverlay = document.getElementById('playOverlay');
+            const overlayPlayBtn = document.getElementById('overlayPlayBtn');
+            const statusIndicator = document.getElementById('statusIndicator');
+            const progressBar = document.getElementById('progressBar');
+            
+            // Elementos del Panel SCADA
+            const scadaTitle = document.getElementById('scadaTitle');
+            const scadaSubtitle = document.getElementById('scadaSubtitle');
+            const scadaMetricsContainer = document.getElementById('scadaMetrics');
+            const scadaVisualizer = document.getElementById('scadaVisualizer');
+
+            let activePlayer = video1;
+            let inactivePlayer = video2;
+            let isTransitioning = false;
+            let statusTimeout;
+            let telemetryInterval;
+            let animationFrameId;
+
+            // Instancia de datos dinámicos actuales para fluctuación
+            let currentTelemetryValues = [];
+
+            // ============================================================
+            // 🔄 MOTOR DE NAVEGACIÓN Y CARGA DUAL (CROSS-FADE)
+            // ============================================================
+            function goToSlide(index) {
+                if (index < 0 || index >= totalSlides || isTransitioning) return;
+                if (index === currentSlide && activePlayer.src !== '') return;
+
+                isTransitioning = true;
+                currentSlide = index;
+                const nextVideoUrl = videoClips[index];
+
+                // Preparar el reproductor inactivo en segundo plano
+                inactivePlayer.src = nextVideoUrl;
+                inactivePlayer.load();
+                inactivePlayer.muted = true; // Estrictamente silenciado
+
+                inactivePlayer.play().then(() => {
+                    // Hacer la transición de fundido cruzado:
+                    inactivePlayer.classList.add('active');
+                    activePlayer.classList.remove('active');
+
+                    // Intercambiar las referencias de reproductores
+                    const temp = activePlayer;
+                    activePlayer = inactivePlayer;
+                    inactivePlayer = temp;
+
+                    // Apagar el reproductor viejo tras completar la transición de opacidad (0.75s)
+                    setTimeout(() => {
+                        inactivePlayer.pause();
+                        inactivePlayer.src = ""; // Liberar memoria
+                        isTransitioning = false;
+                    }, 750);
+                }).catch(err => {
+                    console.log("El navegador bloqueó el autoplay. Requiere interacción inicial.");
+                    playOverlay.classList.add('visible');
+                    isTransitioning = false;
+                });
+
+                // Actualizar la Consola SCADA para la diapositiva actual
+                updateScadaPanel(index);
+                updateProgressBar();
             }
 
-            function updatePresentationChrome() {
-                var index = currentIndex();
-                if (counter) {
-                    counter.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(totalSlides).padStart(2, '0');
-                }
-                if (progressBar) {
-                    progressBar.style.width = (((index + 1) / totalSlides) * 100).toFixed(3) + '%';
-                }
-                slides.forEach(function (slide, i) {
-                    slide.setAttribute('aria-hidden', i === index ? 'false' : 'true');
+            // ============================================================
+            // 📊 MOTOR DE CONSOLA SCADA: RENDERIZACIÓN Y DINAMISMO EN VIVO
+            // ============================================================
+            function updateScadaPanel(index) {
+                const data = scadaDatabase[index];
+                
+                // Actualizar títulos
+                scadaTitle.textContent = data.titulo;
+                scadaSubtitle.textContent = data.subtitulo;
+                scadaTitle.style.color = data.accent;
+                scadaTitle.style.textShadow = `0 0 8px ${data.accent}66`;
+
+                // Detener intervalos y animaciones viejos
+                clearInterval(telemetryInterval);
+                cancelAnimationFrame(animationFrameId);
+
+                // Inicializar las métricas
+                currentTelemetryValues = data.metricas.map(m => {
+                    return {
+                        label: m.label,
+                        baseValue: m.value,
+                        currentValue: m.value,
+                        variacion: m.variacion || 0,
+                        unit: m.unit,
+                        precision: m.precision !== undefined ? m.precision : 2,
+                        static: m.static || false
+                    };
                 });
-                navDots.forEach(function (dot, i) {
-                    dot.setAttribute('aria-current', i === index ? 'step' : 'false');
-                });
+
+                // Renderizar inicialmente las métricas en el DOM
+                renderMetrics(data.accent);
+
+                // Si hay métricas dinámicas, arrancar el temporizador de fluctuación (telemetría viva)
+                const hasDynamic = currentTelemetryValues.some(m => !m.static);
+                if (hasDynamic) {
+                    telemetryInterval = setInterval(() => {
+                        currentTelemetryValues.forEach((m, idx) => {
+                            if (!m.static) {
+                                // Fluctuación técnica realista (caminata aleatoria controlada)
+                                const shift = (Math.random() - 0.5) * m.variacion * 2;
+                                m.currentValue = m.baseValue + shift;
+                                
+                                // Actualizar en el DOM de forma fluida
+                                const valueEl = document.getElementById(`metric-val-${idx}`);
+                                if (valueEl) {
+                                    valueEl.textContent = m.currentValue.toFixed(m.precision);
+                                }
+                            }
+                        });
+                    }, 1200); // Variación cada 1.2 segundos
+                }
+
+                // Renderizar y arrancar los gráficos animados SVG en caliente
+                renderAndAnimateGraph(data.grafico, data.accent);
             }
 
-            navDots.forEach(function (dot) {
-                dot.setAttribute('role', 'button');
-                dot.setAttribute('tabindex', '0');
-                dot.setAttribute('aria-label', 'Ir a la diapositiva ' + dot.textContent.trim().replace(/\s+/g, ' '));
-                dot.addEventListener('keydown', function (event) {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        dot.click();
+            function renderMetrics(accentColor) {
+                scadaMetricsContainer.innerHTML = '';
+                currentTelemetryValues.forEach((m, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'metric-card';
+                    card.style.setProperty('--accent-color', accentColor);
+
+                    const label = document.createElement('span');
+                    label.className = 'metric-label';
+                    label.textContent = m.label;
+
+                    const valContainer = document.createElement('div');
+                    valContainer.className = 'metric-value-container';
+
+                    const value = document.createElement('span');
+                    value.className = 'metric-value';
+                    value.id = `metric-val-${idx}`;
+                    
+                    if (m.static) {
+                        value.textContent = m.baseValue;
+                    } else {
+                        value.textContent = m.baseValue.toFixed(m.precision);
                     }
+
+                    const unit = document.createElement('span');
+                    unit.className = 'metric-unit';
+                    unit.style.color = accentColor;
+                    unit.textContent = m.unit;
+
+                    valContainer.appendChild(value);
+                    valContainer.appendChild(unit);
+                    card.appendChild(label);
+                    card.appendChild(valContainer);
+                    scadaMetricsContainer.appendChild(card);
                 });
-                dot.addEventListener('click', function () {
-                    setTimeout(updatePresentationChrome, 0);
-                });
+            }
+
+            // ============================================================
+            // 📈 GRÁFICOS SVG ANIMADOS DE ALTO RENDIMIENTO (EN CALIENTE)
+            // ============================================================
+            function renderAndAnimateGraph(type, accentColor) {
+                scadaVisualizer.innerHTML = '';
+                
+                if (type === 'radar') {
+                    // Círculo de escaneo radar de alta tecnología
+                    scadaVisualizer.innerHTML = `
+                        <svg width="100%" height="100%" viewBox="0 0 100 100" style="background:#02050b;">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="${accentColor}" stroke-width="0.5" opacity="0.3"/>
+                            <circle cx="50" cy="50" r="30" fill="none" stroke="${accentColor}" stroke-width="0.5" opacity="0.2"/>
+                            <circle cx="50" cy="50" r="15" fill="none" stroke="${accentColor}" stroke-width="0.5" opacity="0.1"/>
+                            <line x1="5" y1="50" x2="95" y2="50" stroke="${accentColor}" stroke-width="0.5" opacity="0.2"/>
+                            <line x1="50" y1="5" x2="50" y2="95" stroke="${accentColor}" stroke-width="0.5" opacity="0.2"/>
+                            <line id="radarSweep" x1="50" y1="50" x2="85" y2="15" stroke="${accentColor}" stroke-width="1.5"/>
+                            <circle cx="50" cy="50" r="2" fill="${accentColor}"/>
+                        </svg>
+                    `;
+                    let angle = 0;
+                    const line = document.getElementById('radarSweep');
+                    function sweep() {
+                        angle = (angle + 1.5) % 360;
+                        const rad = (angle * Math.PI) / 180;
+                        const x = 50 + 40 * Math.cos(rad);
+                        const y = 50 + 40 * Math.sin(rad);
+                        line.setAttribute('x2', x);
+                        line.setAttribute('y2', y);
+                        animationFrameId = requestAnimationFrame(sweep);
+                    }
+                    sweep();
+
+                } else if (type === 'solar' || type === 'solar_waves') {
+                    // Onda de oscilación de potencia fotovoltaica (C.A.)
+                    scadaVisualizer.innerHTML = `
+                        <svg width="100%" height="100%" viewBox="0 0 100 50" style="background:#02050b;">
+                            <path id="wavePath" fill="none" stroke="${accentColor}" stroke-width="1.5" d=""/>
+                            <line x1="0" y1="25" x2="100" y2="25" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+                        </svg>
+                    `;
+                    const path = document.getElementById('wavePath');
+                    let offset = 0;
+                    function animateWave() {
+                        offset += 0.08;
+                        let points = [];
+                        const amp = type === 'solar_waves' ? 12 : 5; // Más dinámico en telemetría
+                        for (let x = 0; x <= 100; x += 2) {
+                            const y = 25 + amp * Math.sin((x * 0.15) - offset);
+                            points.push(`${x},${y}`);
+                        }
+                        path.setAttribute('d', `M ${points.join(' L ')}`);
+                        animationFrameId = requestAnimationFrame(animateWave);
+                    }
+                    animateWave();
+
+                } else if (type === 'hidro' || type === 'hidro_gauge') {
+                    // Tacómetro o indicador rotativo circular de presión/RPM
+                    scadaVisualizer.innerHTML = `
+                        <svg width="100%" height="100%" viewBox="0 0 100 100" style="background:#02050b;">
+                            <path d="M 20 80 A 40 40 0 1 1 80 80" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="8" stroke-linecap="round"/>
+                            <path id="gaugeArc" d="M 20 80 A 40 40 0 0 1 80 80" fill="none" stroke="${accentColor}" stroke-width="8" stroke-linecap="round" stroke-dasharray="188" stroke-dashoffset="188"/>
+                            <line id="gaugeNeedle" x1="50" y1="50" x2="50" y2="20" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                            <circle cx="50" cy="50" r="5" fill="${accentColor}"/>
+                        </svg>
+                    `;
+                    const arc = document.getElementById('gaugeArc');
+                    const needle = document.getElementById('gaugeNeedle');
+                    
+                    function animateGauge() {
+                        // Fluctuación realista de la aguja
+                        const pressureVal = currentTelemetryValues[1] ? currentTelemetryValues[1].currentValue : 1.9;
+                        const percent = (pressureVal - 1.5) / 1.0; // Normalización a escala de la aguja
+                        const limitedPercent = Math.max(0, Math.min(1, percent));
+                        
+                        const angle = -135 + limitedPercent * 270;
+                        needle.setAttribute('transform', `rotate(${angle} 50 50)`);
+                        
+                        // dashoffset de 188 es vacío, 0 es lleno
+                        const offset = 188 - (188 * limitedPercent * 0.75); // Llenado de arco
+                        arc.setAttribute('stroke-dashoffset', offset);
+                        
+                        animationFrameId = requestAnimationFrame(animateGauge);
+                    }
+                    animateGauge();
+
+                } else if (type === 'eolica' || type === 'eolica_waves') {
+                    // Ondas de flujo de aire del Efecto Venturi
+                    scadaVisualizer.innerHTML = `
+                        <svg width="100%" height="100%" viewBox="0 0 100 50" style="background:#02050b;">
+                            <path id="windLine1" fill="none" stroke="${accentColor}" stroke-width="1.2" opacity="0.8" d=""/>
+                            <path id="windLine2" fill="none" stroke="${accentColor}" stroke-width="0.8" opacity="0.5" d=""/>
+                            <path id="windLine3" fill="none" stroke="${accentColor}" stroke-width="1" opacity="0.6" d=""/>
+                        </svg>
+                    `;
+                    const l1 = document.getElementById('windLine1');
+                    const l2 = document.getElementById('windLine2');
+                    const l3 = document.getElementById('windLine3');
+                    let t = 0;
+                    
+                    function animateWind() {
+                        t += 0.12;
+                        const windSpeed = currentTelemetryValues[1] ? currentTelemetryValues[1].currentValue : 6.4;
+                        const speedFactor = windSpeed * 0.015; // Velocidad de onda proporcional al viento real
+                        
+                        let p1 = [], p2 = [], p3 = [];
+                        for (let x = 0; x <= 100; x += 4) {
+                            const y1 = 15 + 4 * Math.sin((x * 0.1) - t * speedFactor * 1.5);
+                            const y2 = 25 + 2 * Math.cos((x * 0.08) - t * speedFactor * 1.2);
+                            const y3 = 35 + 3 * Math.sin((x * 0.12) - t * speedFactor * 1.8);
+                            p1.push(`${x},${y1}`);
+                            p2.push(`${x},${y2}`);
+                            p3.push(`${x},${y3}`);
+                        }
+                        l1.setAttribute('d', `M ${p1.join(' L ')}`);
+                        l2.setAttribute('d', `M ${p2.join(' L ')}`);
+                        l3.setAttribute('d', `M ${p3.join(' L ')}`);
+                        animationFrameId = requestAnimationFrame(animateWind);
+                    }
+                    animateWind();
+
+                } else if (type === 'maqueta' || type === 'maqueta_detail' || type === 'maqueta_dron' || type === 'maqueta_sensors') {
+                    // Ecualizador de tres barras de sensores de confort (Temp, Hum, CO2)
+                    scadaVisualizer.innerHTML = `
+                        <svg width="100%" height="100%" viewBox="0 0 120 60" style="background:#02050b;">
+                            <rect x="20" y="10" width="16" height="40" rx="2" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+                            <rect x="52" y="10" width="16" height="40" rx="2" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+                            <rect x="84" y="10" width="16" height="40" rx="2" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+                            
+                            <rect id="sensorBar1" x="20" y="25" width="16" height="25" rx="2" fill="#86efac"/>
+                            <rect id="sensorBar2" x="52" y="20" width="16" height="30" rx="2" fill="#00d2dc"/>
+                            <rect id="sensorBar3" x="84" y="30" width="16" height="20" rx="2" fill="#ff7849"/>
+                            
+                            <text x="28" y="56" fill="rgba(255,255,255,0.4)" font-size="5" text-anchor="middle" font-weight="600">TEMP</text>
+                            <text x="60" y="56" fill="rgba(255,255,255,0.4)" font-size="5" text-anchor="middle" font-weight="600">HUM</text>
+                            <text x="92" y="56" fill="rgba(255,255,255,0.4)" font-size="5" text-anchor="middle" font-weight="600">CO2</text>
+                        </svg>
+                    `;
+                    const b1 = document.getElementById('sensorBar1');
+                    const b2 = document.getElementById('sensorBar2');
+                    const b3 = document.getElementById('sensorBar3');
+                    
+                    function animateBars() {
+                        let tVal = 19.4, hVal = 54.8, cVal = 382;
+                        
+                        if (currentTelemetryValues[0] && !currentTelemetryValues[0].static) {
+                            tVal = currentTelemetryValues[0].currentValue;
+                            hVal = currentTelemetryValues[1].currentValue;
+                            cVal = currentTelemetryValues[2].currentValue;
+                        }
+                        
+                        // Normalizaciones
+                        const tPercent = Math.max(0, Math.min(1, (tVal - 15) / 10)); // Rango 15-25 °C
+                        const hPercent = Math.max(0, Math.min(1, (hVal - 40) / 30)); // Rango 40-70 %
+                        const cPercent = Math.max(0, Math.min(1, (cVal - 300) / 200)); // Rango 300-500 ppm
+                        
+                        const h1 = tPercent * 36;
+                        b1.setAttribute('height', h1);
+                        b1.setAttribute('y', 50 - h1);
+                        
+                        const h2 = hPercent * 36;
+                        b2.setAttribute('height', h2);
+                        b2.setAttribute('y', 50 - h2);
+                        
+                        const h3 = cPercent * 36;
+                        b3.setAttribute('height', h3);
+                        b3.setAttribute('y', 50 - h3);
+                        
+                        animationFrameId = requestAnimationFrame(animateBars);
+                    }
+                    animateBars();
+                }
+            }
+
+            // ============================================================
+            // ⏳ SEGUIMIENTO DEL TIEMPO DE LA DIAPOSITIVA (BARRA PROGRESO)
+            // ============================================================
+            function updateProgressBar() {
+                // Cálculo simple de progreso en base al total de diapositivas
+                const percent = ((currentSlide + 1) / totalSlides) * 100;
+                progressBar.style.width = `${percent}%`;
+            }
+
+            // ============================================================
+            // 🕹️ LÓGICA DE CONTROL (PLAY / PAUSA / PANTALLA COMPLETA)
+            // ============================================================
+            function togglePlay() {
+                if (activePlayer.paused) {
+                    activePlayer.play().then(() => {
+                        playOverlay.classList.remove('visible');
+                        showStatusIndicator('REPRODUCIR');
+                    });
+                } else {
+                    activePlayer.pause();
+                    showStatusIndicator('PAUSADO');
+                }
+            }
+
+            function showStatusIndicator(text) {
+                clearTimeout(statusTimeout);
+                statusIndicator.textContent = text;
+                statusIndicator.classList.add('visible');
+                
+                statusTimeout = setTimeout(() => {
+                    statusIndicator.classList.remove('visible');
+                }, 1500);
+            }
+
+            function toggleFullscreen() {
+                if (!document.fullscreenElement) {
+                    if (document.documentElement.requestFullscreen) {
+                        document.documentElement.requestFullscreen();
+                    } else if (document.documentElement.webkitRequestFullscreen) {
+                        document.documentElement.webkitRequestFullscreen(); // Safari
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    }
+                }
+            }
+
+            // ============================================================
+            // ⌨️ ASIGNACIÓN DE EVENTOS (TECLADO & RATÓN)
+            // ============================================================
+
+            // Clic en el video avanza diapositiva
+            container.addEventListener('click', (e) => {
+                if (e.target.closest('#overlayPlayBtn') || playOverlay.classList.contains('visible') || e.target.closest('.scada-panel')) return;
+                
+                if (currentSlide < totalSlides - 1) {
+                    goToSlide(currentSlide + 1);
+                } else {
+                    showStatusIndicator('FIN DE LA PRESENTACIÓN');
+                }
             });
 
-            document.addEventListener('keydown', function () {
-                setTimeout(updatePresentationChrome, 0);
-            });
-            document.addEventListener('touchend', function () {
-                setTimeout(updatePresentationChrome, 0);
-            });
-
-            var observer = new MutationObserver(updatePresentationChrome);
-            navDots.forEach(function (dot) {
-                observer.observe(dot, { attributes: true, attributeFilter: ['class'] });
+            // Doble clic en cualquier parte (excepto panel) activa pantalla completa
+            container.addEventListener('dblclick', (e) => {
+                if (e.target.closest('#overlayPlayBtn') || e.target.closest('.scada-panel')) return;
+                toggleFullscreen();
             });
 
-            updatePresentationChrome();
+            overlayPlayBtn.addEventListener('click', () => {
+                playOverlay.classList.remove('visible');
+                activePlayer.play();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                switch (e.key) {
+                    case 'ArrowRight':
+                    case 'PageDown':
+                        e.preventDefault();
+                        if (currentSlide < totalSlides - 1) {
+                            goToSlide(currentSlide + 1);
+                        } else {
+                            showStatusIndicator('FIN DE LA PRESENTACIÓN');
+                        }
+                        break;
+                    case 'ArrowLeft':
+                    case 'PageUp':
+                        e.preventDefault();
+                        if (currentSlide > 0) {
+                            goToSlide(currentSlide - 1);
+                        } else {
+                            showStatusIndicator('PRIMERA DIAPOSITIVA');
+                        }
+                        break;
+                    case ' ':
+                        e.preventDefault();
+                        togglePlay();
+                        break;
+                    case 'p':
+                    case 'P':
+                        togglePlay();
+                        break;
+                    case 'f':
+                    case 'F':
+                        toggleFullscreen();
+                        break;
+                }
+            });
+
+            // Soporte de Swipe Táctil
+            let touchStartX = 0;
+            document.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            document.addEventListener('touchend', (e) => {
+                if (e.target.closest('.scada-panel')) return;
+                const diff = touchStartX - e.changedTouches[0].screenX;
+                if (Math.abs(diff) > 80) {
+                    if (diff > 0 && currentSlide < totalSlides - 1) {
+                        goToSlide(currentSlide + 1);
+                    } else if (diff < 0 && currentSlide > 0) {
+                        goToSlide(currentSlide - 1);
+                    }
+                }
+            }, { passive: true });
+
+            // ============================================================
+            // 🖱️ OCULTACIÓN AUTOMÁTICA DEL CURSOR DEL RATÓN
+            // ============================================================
+            let mouseTimer;
+            
+            function hideMouseCursor() {
+                document.body.classList.add('hide-cursor');
+            }
+
+            function resetMouseTimer() {
+                document.body.classList.remove('hide-cursor');
+                clearTimeout(mouseTimer);
+                mouseTimer = setTimeout(hideMouseCursor, 2000);
+            }
+
+            window.addEventListener('mousemove', resetMouseTimer);
+            window.addEventListener('mousedown', resetMouseTimer);
+            window.addEventListener('keydown', resetMouseTimer);
+            resetMouseTimer();
+
+            // ============================================================
+            // 🚀 INICIAR PRESENTACIÓN E INICIALIZAR PANEL SCADA
+            // ============================================================
+            goToSlide(0);
         });
     </script>
 </body>
