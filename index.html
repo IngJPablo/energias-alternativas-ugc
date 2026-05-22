@@ -72,14 +72,14 @@
             flex-direction: row;
         }
 
-        /* Contenedor del Video (72%) */
+        /* Contenedor del Video (100% tras HUD flotante) */
         .video-viewport {
             position: relative;
-            width: 72%;
+            width: 100%;
             height: 100%;
             background-color: #000000;
             overflow: hidden;
-            border-right: 2px solid rgba(255, 255, 255, 0.05);
+            border-right: none;
         }
 
         .slide-video {
@@ -129,43 +129,60 @@
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
         }
 
-        /* 📊 PANEL DE TELEMETRÍA SCADA (28%) */
+        /* 📊 HUD FLOTANTE SCADA DE TELEMETRÍA (SUTIL Y TRANSLÚCIDO) */
         .scada-panel {
-            width: 28%;
-            height: 100%;
-            background: linear-gradient(180deg, #090e1a 0%, #04060b 100%);
-            padding: 24px;
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            width: 270px;
+            height: auto;
+            max-height: calc(100% - 48px);
+            background: rgba(10, 16, 28, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 210, 220, 0.2);
+            border-radius: 16px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            z-index: 20;
-            border-left: 1px solid rgba(0, 210, 220, 0.15);
-            box-shadow: inset 10px 0 30px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
+            gap: 12px;
+            z-index: 25;
+            box-shadow: 
+                0 20px 50px rgba(0, 0, 0, 0.65),
+                inset 0 0 20px rgba(0, 210, 220, 0.05);
+            overflow-y: auto;
+            transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s;
+        }
+
+        .scada-panel.hidden {
+            opacity: 0;
+            transform: translateX(-20px);
+            visibility: hidden;
+            pointer-events: none;
         }
 
         .scada-header {
-            border-bottom: 1px solid rgba(0, 210, 220, 0.2);
-            padding-bottom: 12px;
-            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(0, 210, 220, 0.15);
+            padding-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .scada-title {
             font-family: 'Outfit', system-ui, -apple-system, sans-serif;
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             font-weight: 700;
             color: #00d2dc;
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            text-shadow: 0 0 8px rgba(0, 210, 220, 0.4);
+            text-shadow: 0 0 6px rgba(0, 210, 220, 0.3);
         }
 
         .scada-subtitle {
-            font-size: 0.65rem;
-            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.45);
             font-weight: 600;
-            letter-spacing: 1px;
-            margin-top: 4px;
+            letter-spacing: 0.8px;
+            margin-top: 2px;
             text-transform: uppercase;
         }
 
@@ -173,15 +190,15 @@
         .scada-metrics {
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            flex-grow: 1;
+            gap: 8px;
+            flex-grow: 0;
         }
 
         .metric-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 14px;
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 10px;
+            padding: 8px 12px;
             display: flex;
             flex-direction: column;
             position: relative;
@@ -195,54 +212,90 @@
             left: 0;
             top: 0;
             height: 100%;
-            width: 3px;
+            width: 2.5px;
             background-color: var(--accent-color, #00d2dc);
-            box-shadow: 0 0 8px var(--accent-color, #00d2dc);
+            box-shadow: 0 0 6px var(--accent-color, #00d2dc);
         }
 
         .metric-label {
-            font-size: 0.65rem;
-            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.58rem;
+            color: rgba(255, 255, 255, 0.35);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             font-weight: 600;
         }
 
         .metric-value-container {
             display: flex;
             align-items: baseline;
-            margin-top: 6px;
+            margin-top: 2px;
         }
 
         .metric-value {
             font-family: 'Courier New', monospace;
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: #ffffff;
             letter-spacing: -0.5px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.08);
         }
 
         .metric-unit {
-            font-size: 0.8rem;
+            font-size: 0.72rem;
             color: var(--accent-color, #00d2dc);
-            margin-left: 4px;
+            margin-left: 3px;
             font-weight: 600;
         }
 
         /* Visualizador de Gráfico Dinámico */
         .scada-visualizer {
-            height: 130px;
+            height: 80px;
             width: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(0, 210, 220, 0.1);
-            border-radius: 12px;
-            margin-top: 16px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(0, 210, 220, 0.08);
+            border-radius: 10px;
+            margin-top: 4px;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+        }
+
+        /* 👁️ BOTÓN FLOTANTE HUD TOGGLE */
+        .hud-toggle-btn {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            z-index: 25;
+            background: rgba(13, 18, 30, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 210, 220, 0.3);
+            color: rgba(255, 255, 255, 0.8);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .hud-toggle-btn:hover {
+            background: rgba(0, 210, 220, 0.2);
+            color: #00d2dc;
+            border-color: #00d2dc;
+            box-shadow: 0 0 15px rgba(0, 210, 220, 0.4);
+            transform: scale(1.05);
+        }
+
+        .hud-toggle-btn.active {
+            background: rgba(0, 210, 220, 0.15);
+            color: #00d2dc;
+            border-color: rgba(0, 210, 220, 0.5);
         }
 
         /* ⏳ BARRA DE PROGRESO DE DIAPOSITIVA (Sutil línea premium de carga) */
@@ -405,7 +458,7 @@
             <!-- 🖥️ PANTALLA DIGITAL COMPLETA -->
             <div class="tv-screen">
                 
-                <!-- 🖥️ VISTA DEL VIDEO (72%) -->
+                <!-- 🖥️ VISTA DEL VIDEO (100% CON HUD FLOTANTE) -->
                 <div class="video-viewport">
                     <!-- Reproductor 1 -->
                     <video id="video1" class="slide-video active" muted playsinline loop></video>
@@ -422,24 +475,38 @@
                     <div class="tv-progress-bar-container">
                         <div class="tv-progress-bar" id="progressBar"></div>
                     </div>
-                </div>
 
-                <!-- 📊 PANEL SCADA HOLOGRÁFICO DE TELEMETRÍA (28%) -->
-                <div class="scada-panel">
-                    <div class="scada-header">
-                        <div class="scada-title" id="scadaTitle">CONSOLA SCADA</div>
-                        <div class="scada-subtitle" id="scadaSubtitle">EDIFICIO SOSTENIBLE</div>
+                    <!-- 📊 PANEL SCADA HOLOGRÁFICO DE TELEMETRÍA (HUD FLOTANTE) -->
+                    <div class="scada-panel hidden">
+                        <div class="scada-header">
+                            <div class="scada-title" id="scadaTitle">CONSOLA SCADA</div>
+                            <div class="scada-subtitle" id="scadaSubtitle">EDIFICIO SOSTENIBLE</div>
+                        </div>
+                        
+                        <!-- Métricas de Telemetría Dinámicas -->
+                        <div class="scada-metrics" id="scadaMetrics">
+                            <!-- Renderizado en caliente por JS -->
+                        </div>
+                        
+                        <!-- Gráfico SVG Animado en Caliente -->
+                        <div class="scada-visualizer" id="scadaVisualizer">
+                            <!-- Renderizado dinámico por JS -->
+                        </div>
                     </div>
-                    
-                    <!-- Métricas de Telemetría Dinámicas -->
-                    <div class="scada-metrics" id="scadaMetrics">
-                        <!-- Renderizado en caliente por JS -->
-                    </div>
-                    
-                    <!-- Gráfico SVG Animado en Caliente -->
-                    <div class="scada-visualizer" id="scadaVisualizer">
-                        <!-- Renderizado dinámico por JS -->
-                    </div>
+
+                    <!-- 👁️ BOTÓN FLOTANTE PARA ALTERNAR EL HUD SCADA -->
+                    <button class="hud-toggle-btn" id="hudToggleBtn" title="Alternar panel SCADA (Tecla H)" aria-label="Alternar panel SCADA">
+                        <!-- Icono de ojo premium (visible cuando HUD activo) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon" style="display:none;">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <!-- Icono de ojo tachado (visible cuando HUD oculto) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                        </svg>
+                    </button>
                 </div>
 
                 <!-- Overlay de Inicio en caso de Autoplay bloqueado por el navegador -->
@@ -644,6 +711,7 @@
             const scadaSubtitle = document.getElementById('scadaSubtitle');
             const scadaMetricsContainer = document.getElementById('scadaMetrics');
             const scadaVisualizer = document.getElementById('scadaVisualizer');
+            const hudToggleBtn = document.getElementById('hudToggleBtn');
 
             let activePlayer = video1;
             let inactivePlayer = video2;
@@ -1012,13 +1080,40 @@
                 }
             }
 
+            // Ocultar / Mostrar HUD SCADA
+            function toggleHud() {
+                const scadaPanel = document.querySelector('.scada-panel');
+                if (scadaPanel && hudToggleBtn) {
+                    const isHidden = scadaPanel.classList.toggle('hidden');
+                    hudToggleBtn.classList.toggle('active', !isHidden);
+                    
+                    const eyeIcon = hudToggleBtn.querySelector('.eye-icon');
+                    const eyeOffIcon = hudToggleBtn.querySelector('.eye-off-icon');
+                    if (isHidden) {
+                        eyeIcon.style.display = 'none';
+                        eyeOffIcon.style.display = 'block';
+                        showStatusIndicator('HUD OCULTO');
+                    } else {
+                        eyeIcon.style.display = 'block';
+                        eyeOffIcon.style.display = 'none';
+                        showStatusIndicator('HUD ACTIVO');
+                    }
+                }
+            }
+
             // ============================================================
             // ⌨️ ASIGNACIÓN DE EVENTOS (TECLADO & RATÓN)
             // ============================================================
 
+            // Evento de alternancia del HUD por botón
+            hudToggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleHud();
+            });
+
             // Clic en el video avanza diapositiva
             container.addEventListener('click', (e) => {
-                if (e.target.closest('#overlayPlayBtn') || playOverlay.classList.contains('visible') || e.target.closest('.scada-panel')) return;
+                if (e.target.closest('#overlayPlayBtn') || playOverlay.classList.contains('visible') || e.target.closest('.scada-panel') || e.target.closest('.hud-toggle-btn')) return;
                 
                 if (currentSlide < totalSlides - 1) {
                     goToSlide(currentSlide + 1);
@@ -1027,9 +1122,9 @@
                 }
             });
 
-            // Doble clic en cualquier parte (excepto panel) activa pantalla completa
+            // Doble clic en cualquier parte (excepto panel o toggle) activa pantalla completa
             container.addEventListener('dblclick', (e) => {
-                if (e.target.closest('#overlayPlayBtn') || e.target.closest('.scada-panel')) return;
+                if (e.target.closest('#overlayPlayBtn') || e.target.closest('.scada-panel') || e.target.closest('.hud-toggle-btn')) return;
                 toggleFullscreen();
             });
 
@@ -1070,6 +1165,11 @@
                     case 'F':
                         toggleFullscreen();
                         break;
+                    case 'h':
+                    case 'H':
+                        e.preventDefault();
+                        toggleHud();
+                        break;
                 }
             });
 
@@ -1080,7 +1180,7 @@
             }, { passive: true });
 
             document.addEventListener('touchend', (e) => {
-                if (e.target.closest('.scada-panel')) return;
+                if (e.target.closest('.scada-panel') || e.target.closest('.hud-toggle-btn')) return;
                 const diff = touchStartX - e.changedTouches[0].screenX;
                 if (Math.abs(diff) > 80) {
                     if (diff > 0 && currentSlide < totalSlides - 1) {
